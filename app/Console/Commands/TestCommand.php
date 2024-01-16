@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Console\Commands;
+
+use App\Mail\EmailVerifyMail;
+use App\Mail\SignupMail;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
+
+class TestCommand extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'TestCommand';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
+
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+    public function handle()
+    {
+        Mail::to('drollmatt@outlook.com')->send(new SignupMail(10));
+        return Command::SUCCESS;
+    }
+}
