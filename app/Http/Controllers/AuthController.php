@@ -36,6 +36,7 @@ class AuthController extends CustomBaseController
     {
         return Str::lower($request->input('user_id')) . '|' . $request->ip();
     }
+    
     //
     /**
      * Store a newly created resource in storage.
