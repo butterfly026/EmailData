@@ -29,8 +29,8 @@
                     <div id="signup-form" class="signup-form">
                         @csrf
                         <h1 style="text-align: center;"><a href='/' style="text-decoration: blink;"> <strong
-                            style="font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;color: #f05c42">Data
-                            Company</strong> </a></h1>
+                            style="font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;color: #f05c42">Email
+                            Data</strong> </a></h1>
                         <h2 class="form-title">Create account</h2>
 
                         <div class="form-group">
