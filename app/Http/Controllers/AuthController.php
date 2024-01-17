@@ -27,6 +27,10 @@ class AuthController extends CustomBaseController
         return view('auth.login');
     }
 
+    public function notFoundPage() 
+    {
+        return view('404error');
+    }
     public function signupPage()
     {
         return view('auth.register');
@@ -36,7 +40,7 @@ class AuthController extends CustomBaseController
     {
         return Str::lower($request->input('user_id')) . '|' . $request->ip();
     }
-    
+
     //
     /**
      * Store a newly created resource in storage.

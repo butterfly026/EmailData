@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -22,19 +23,22 @@ class ExceptionRender
     public static function Render(Throwable $e): mixed
     {
         $class = get_class($e);
+        $request = request();
         if ($class != Err::class) {
             switch ($class) {
                 case AuthenticationException::class:
                     return redirect(route('auth.loginPage'));
-                //                case NotFoundHttpException::class:
-//                case ValidationException::class:
-//                case ArgumentCountError::class:
-//                default:
-//                    Err::Throw($e->getMessage(), 999);
+                case NotFoundHttpException::class:
+                    if(Request::isMethod('get'))
+                        return redirect(route('route.404error'));
+                // case ValidationException::class:
+                // case ArgumentCountError::class:
+                // default:
+                //     return redirect(route('auth.loginPage'));
+                    //                    Err::Throw($e->getMessage(), 999);
             }
         }
 
-        $request = request();
         $isDebug = config('app.debug');
 
         $debugInfo = [

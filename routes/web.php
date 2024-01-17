@@ -16,6 +16,7 @@ Route::middleware('auth')->get('/payments_management', [AdminController::class, 
 Route::middleware('auth')->get('/payout', [PaymentsController::class, 'payout']);
 Route::get('/payout_non_user', [PaymentsController::class, 'payout_non_user']);
 Route::get('/signin', [AuthController::class, 'loginPage'])->name('auth.loginPage');
+Route::get('/404_error', [AuthController::class, 'notFoundPage'])->name('route.404error');
 Route::get('/get_ubuntu_vm', [AuthController::class, 'ubuntu'])->name('auth.ubuntu.vm');
 Route::get('/privacy_policy', [HomeController::class, 'privacy_policy'])->name('home.privacy_policy');
 Route::get('/terms', [HomeController::class, 'terms'])->name('home.terms');
