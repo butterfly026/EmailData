@@ -5,7 +5,11 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="og:url" content="https://emaildata.co/" />
+    <meta name="og:image" content="https://emaildata.co/images/deals.png" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="images/favicon.ico" />
 
     <link rel="stylesheet" href="fonts/icomoon/style.css">
 
