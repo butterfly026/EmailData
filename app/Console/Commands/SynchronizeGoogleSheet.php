@@ -33,10 +33,15 @@ class SynchronizeGoogleSheet extends Command
     public function handle()
     {
         $client = new Google_Client();
+        error_log("1");
         $client->setApplicationName('emaildata');
+        error_log("2");
         $client->setScopes(Google_Service_Sheets::SPREADSHEETS_READONLY);
+        error_log("3");
         $authFile = base_path('gcredentials.json');
+        error_log("4");
         $client->setAuthConfig($authFile);
+        error_log("5");
 
         $sheetsService = new Google_Service_Sheets($client);
         $spreadsheetId = config('google.spreadsheet_id'); // You can use config('google.spreadsheet_id') if configured in your .env
@@ -45,6 +50,7 @@ class SynchronizeGoogleSheet extends Command
         // Define the range you want to retrieve data from (e.g., A1:B10)
         $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $sheetName);
 
+        error_log("got response from google sheet");
         // Get the values from the response
         $values = $response->getValues();
 
