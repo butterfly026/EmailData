@@ -5,7 +5,7 @@
 @section('content')
     <style>
         .team-review {
-            width: 360px;
+            width: 100%;
             height: 360px;
             background: rgb(49 49 49);
             font-size: 23px;

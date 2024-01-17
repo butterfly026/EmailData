@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="css/responsive.css">
 
     <link rel="stylesheet" type="text/css" href="/css/toastify.min.css">
+    
+    <script async data-uid="fd3b80b292" src="https://emaildata.ck.page/fd3b80b292/index.js"></script>
 
     <script src="js/jquery-3.4.1.js"></script>
     <!-- jQuery  for scroll me js -->
