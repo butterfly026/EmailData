@@ -41,6 +41,7 @@ class SynchronizeGoogleSheet extends Command
         $sheetsService = new Google_Service_Sheets($client);
         $spreadsheetId = config('google.spreadsheet_id'); // You can use config('google.spreadsheet_id') if configured in your .env
         $sheetName = 'DONT TOUCH';
+        error_log($spreadsheetId);
 
         // Define the range you want to retrieve data from (e.g., A1:B10)
         $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $sheetName);
