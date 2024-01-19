@@ -127,7 +127,8 @@ class PaymentsController extends CustomBaseController
             Err::throw('Contact to administrator to pay out!!');
         }
         $config = json_decode($setting->value, true);
-        $endpoint_secret = 'whsec_BSKW7aOAFKhJwGnsnoON7qsnShYMiJWE';
+        // $endpoint_secret = 'whsec_BSKW7aOAFKhJwGnsnoON7qsnShYMiJWE';
+        $endpoint_secret = 'we_1OaAUXLndwq2SynHW9lQDGc5';
         Stripe::setApiKey($config['stripe_secret_key']);
         $event = null;
 
@@ -145,6 +146,7 @@ class PaymentsController extends CustomBaseController
         } catch (\Stripe\Exception\SignatureVerificationException $e) {
             // Invalid signature
             http_response_code(400);
+            error_log('Stripe Web Hook Exception 2 \r\t\t\t' . $e->getMessage());
             logger('Stripe Web Hook Exception 2 \r\t\t\t' . $e->getMessage());
             exit;
         }
