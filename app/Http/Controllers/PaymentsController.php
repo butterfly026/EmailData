@@ -177,11 +177,11 @@ class PaymentsController extends CustomBaseController
     function paySuccess(Request $request)
     {
         $user = $this->getUser();
-        if($user) {
-            $user->is_paid = 1;
-            $user->last_paid_at = now();
-            $user->save();
-        }
+        // if($user) {
+        //     $user->is_paid = 1;
+        //     $user->last_paid_at = now();
+        //     $user->save();
+        // }
         return redirect('/home');
     }
 
