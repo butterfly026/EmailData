@@ -131,7 +131,7 @@ class PaymentsController extends CustomBaseController
         }
         $config = json_decode($setting->value, true);
         // $endpoint_secret = 'whsec_BSKW7aOAFKhJwGnsnoON7qsnShYMiJWE';
-        $endpoint_secret = 'we_1OaAUXLndwq2SynHW9lQDGc5';
+        $endpoint_secret = 'whsec_Viovi8p13Zdc1kzEMihtR9hMtiSo58Kz';
         Stripe::setApiKey($config['stripe_secret_key']);
         $event = null;
 
