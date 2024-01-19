@@ -122,16 +122,13 @@ class PaymentsController extends CustomBaseController
     {
         $payload = $request->getContent();
         $sig_header = $request->header('stripe-signature');
-        logger("parameters.............");
-        logger(json_encode($payload));
-        logger(json_encode($sig_header));
         $setting = Settings::where('key', 'payments')->first();
         if(!$setting) {
             Err::throw('Contact to administrator to pay out!!');
         }
         $config = json_decode($setting->value, true);
         // $endpoint_secret = 'whsec_BSKW7aOAFKhJwGnsnoON7qsnShYMiJWE';
-        $endpoint_secret = 'whsec_Viovi8p13Zdc1kzEMihtR9hMtiSo58Kz';
+        $endpoint_secret = $config['web_hook_secret'];
         Stripe::setApiKey($config['stripe_secret_key']);
         $event = null;
 

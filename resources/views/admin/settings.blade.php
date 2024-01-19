@@ -35,6 +35,14 @@
                                             autocomplete="off" name="stripe_api_key" />
                                     </div>
                                 </div>
+                                
+                                <div class='col-12'>
+                                    <div class="search-form display-flex admin-search-form">
+                                        <span class="form-label" style="width: 300px;">Web Hook Key:&nbsp;</span>
+                                        <input type="text" class="search-field" value="" role="presentation"
+                                            autocomplete="off" name="web_hook_secret" />
+                                    </div>
+                                </div>
                                 <div class='col-12'>
                                     <div class="search-form display-flex admin-search-form">
                                         <span class="form-label" style="width: 300px;">Full Access Pay
@@ -218,6 +226,7 @@
                         const value = JSON.parse(res.value);
                         $('input[name="stripe_secret_key"]').val(value.stripe_secret_key ?? '');
                         $('input[name="stripe_api_key"]').val(value.stripe_api_key ?? '');
+                        $('input[name="web_hook_secret"]').val(value.web_hook_secret ?? '');
                         $('input[name="pay_amount"]').val(value.pay_amount ?? 0);
                         $('input[name="max_free_num"]').val(value.max_free_num ?? 1);
                     } else {
@@ -244,6 +253,7 @@
                     value: JSON.stringify({
                         stripe_secret_key: $('input[name="stripe_secret_key"]').val(),
                         stripe_api_key: $('input[name="stripe_api_key"]').val(),
+                        web_hook_secret: $('input[name="web_hook_secret"]').val(),
                         pay_amount: $('input[name="pay_amount"]').val(),
                         max_free_num: $('input[name="max_free_num"]').val(),
                     })
