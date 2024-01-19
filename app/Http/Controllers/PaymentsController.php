@@ -122,6 +122,9 @@ class PaymentsController extends CustomBaseController
     {
         $payload = $request->getContent();
         $sig_header = $request->header('stripe-signature');
+        logger("parameters.............");
+        logger(json_encode($payload));
+        logger(json_encode($sig_header));
         $setting = Settings::where('key', 'payments')->first();
         if(!$setting) {
             Err::throw('Contact to administrator to pay out!!');
@@ -146,7 +149,6 @@ class PaymentsController extends CustomBaseController
         } catch (\Stripe\Exception\SignatureVerificationException $e) {
             // Invalid signature
             http_response_code(400);
-            error_log('Stripe Web Hook Exception 2 \r\t\t\t' . $e->getMessage());
             logger('Stripe Web Hook Exception 2 \r\t\t\t' . $e->getMessage());
             exit;
         }
