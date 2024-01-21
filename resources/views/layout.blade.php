@@ -79,7 +79,7 @@
     <div id="loading">
         <div id="loading-center">
             <div class="load-img">
-                <img src="images/loading.gif" alt="loader">
+                <img src="/images/loading.gif" alt="loader">
             </div>
         </div>
     </div>
@@ -117,7 +117,7 @@
                                 @else
                                     <a class="navbar-brand" href="/">
                             @endif
-                            <img class="img-fluid" src="images/logo_red.png" alt="img">
+                            <img class="img-fluid" src="/images/logo_red.png" alt="img">
                             </a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse"
                                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -423,7 +423,7 @@
             </script>
         @endauth
         <footer class="footer3 client-footer">
-            <img src="images/footer-pattern.png" class="img-fluid footer-pattern" alt="#">
+            <img src="/images/footer-pattern.png" class="img-fluid footer-pattern" alt="#">
             <div class="footer-topbar" style="padding: 20px 0px; margin-bottom: 0px;">
                 <div class="container">
                     <div class="row">
@@ -432,7 +432,7 @@
                                 <div class="textwidget">
                                     <div class="row ">
                                         <div class="col-lg-6 col-md-12  mb-4 mb-lg-0">
-                                            <img class="img-fluid" src="images/logo_white.png" alt="img"
+                                            <img class="img-fluid" src="/images/logo_white.png" alt="img"
                                                 style="height: 40px;">
                                             <p class="mb-0 text-white" style="margin-left: 20px;">Your home to
                                                 unlimited lead access.</p>
