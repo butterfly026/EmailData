@@ -113,10 +113,11 @@ class AuthController extends CustomBaseController
         }
         
         $user->tokens()->where('name', 'customer')->delete();
-        $user->email_verif_code = Hash::make("id:$user->id.user:$user->email");
+        $user->email_verif_code = md5(uniqid(rand(), true));
         $user->email_verif_sent_at = now()->toDateTimeString();
         $user->password = bcrypt($params['password']);
         $user->save();
+        logger("Sending email to $user->email with verification code $user->email_verif_code");
         Mail::to($user->email)->send(new SignupMail($user->email_verif_code));
         // if (!Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
         //     RateLimiter::hit($this->throttleKey($request));
@@ -143,7 +144,7 @@ class AuthController extends CustomBaseController
     public function sendVerifyEmail(Request $request)
     {
         $user = $this->getUser();
-        $user->email_verif_code = Hash::make("id:$user->id.user:$user->email");
+        $user->email_verif_code = md5(uniqid(rand(), true));
         $user->email_verif_sent_at = now()->toDateTimeString();
         $user->save();
         Mail::to($user->email)->send(new SignupMail($user->email_verif_code));
