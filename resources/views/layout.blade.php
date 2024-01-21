@@ -112,12 +112,12 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <nav class="navbar navbar-expand-lg navbar-light">
-                            @if(Auth::user())
-                            <a class="navbar-brand" href="/home">
-                            @else
-                            <a class="navbar-brand" href="/">
+                            @if (Auth::user())
+                                <a class="navbar-brand" href="/home">
+                                @else
+                                    <a class="navbar-brand" href="/">
                             @endif
-                                <img class="img-fluid" src="images/logo_red.png" alt="img">
+                            <img class="img-fluid" src="images/logo_red.png" alt="img">
                             </a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse"
                                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -133,19 +133,22 @@
                                 <ul class="navbar-nav mr-auto w-100 justify-content-end">
 
                                     @if (Auth::user())
-                                        @if (Auth::user() && !Auth::user()->is_paid)
-                                            <li class="nav-item" style="display: flex; align-items: center;">
-                                                <a class="iq-button iq-gradient-btn d-inline-block"
-                                                    style="padding: 5px 30px; font-size: 17px;" href="payout">
-                                                    <span>
-                                                        Access All Data
-                                                    </span>
-                                                </a>
-                                            </li>
-                                        @elseif (Auth::user() && Auth::user()->is_paid)
-                                            {{-- <li class="nav-item" style="display: flex; align-items: center;">
-                                                <h4>{{ $expired_days }} Days Left To Access All Data</h4>
-                                            </li> --}}
+
+                                        @if (Auth::user()->is_email_verified)
+                                            @if (Auth::user() && !Auth::user()->is_paid)
+                                                <li class="nav-item" style="display: flex; align-items: center;">
+                                                    <a class="iq-button iq-gradient-btn d-inline-block"
+                                                        style="padding: 5px 30px; font-size: 17px;" href="payout">
+                                                        <span>
+                                                            Access All Data
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            @elseif (Auth::user() && Auth::user()->is_paid)
+                                                {{-- <li class="nav-item" style="display: flex; align-items: center;">
+                                                    <h4>{{ $expired_days }} Days Left To Access All Data</h4>
+                                                </li> --}}
+                                            @endif
                                         @endif
                                         <li class="nav-item dropdown" style="display: flex; align-items: center;">
                                             <a class=" nav-instant-access nav-link d-inline-block"
@@ -157,18 +160,18 @@
                                                 </span>
                                             </a>
                                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal"
-                                                    data-target="#userInfoModal">
+                                                <a class="dropdown-item" href="javascript:void(0)"
+                                                    data-toggle="modal" data-target="#userInfoModal">
                                                     <i class="fa fa-info-circle mr-2" aria-hidden="true"
                                                         style="font-size: 25px;"></i>
                                                     Account Info
                                                 </a>
-                                                @if(Auth::user()->user_type == 1)
-                                                <a class="dropdown-item" href="admin_panel">
-                                                    <i class="fa fa-edit mr-2" aria-hidden="true"
-                                                        style="font-size: 25px;"></i>
-                                                    Admin Panel
-                                                </a>
+                                                @if (Auth::user()->user_type == 1)
+                                                    <a class="dropdown-item" href="admin_panel">
+                                                        <i class="fa fa-edit mr-2" aria-hidden="true"
+                                                            style="font-size: 25px;"></i>
+                                                        Admin Panel
+                                                    </a>
                                                 @endif
                                                 <a class="dropdown-item" href="signout">
                                                     <i class="fa fa-sign-out mr-2" aria-hidden="true"
@@ -205,11 +208,33 @@
             </div>
         </header>
 
-        <main>
-            <div class="container mx-auto px-8 py-16">
-                @yield('content')
-            </div>
-        </main>
+        @if (Auth::user())
+            @if (Auth::user()->is_email_verified)
+                <main>
+                    <div class="container mx-auto px-8 py-16">
+                        @yield('content')
+                    </div>
+                </main>
+            @else
+                <main>
+                    <div class="container mx-auto px-8 py-16" style="height: calc(100vh - 147px); padding-top: 80px; display: flex; justify-content: center; align-items:center; flex-direction: column;">
+                        <h1 style="margin-bottom: 10px;">Please verify your email to access</h1>
+                        <a class="d-flex ml-2 instant-activate" href="javascript:sendVerifyEmail()">
+                            <i class="fa fa-envelope" style="margin-right: 3px;"></i>
+                            <span>Verify By Email</span>
+                        </a>
+                    </div>
+                </main>
+            @endif
+        @else
+            <main>
+                <div class="container mx-auto px-8 py-16">
+                    @yield('content')
+                </div>
+            </main>
+        @endif
+
+
         @auth
             <div id="userInfoModal" tabindex="-1" aria-hidden="true" class="modal fade">
                 <div class="modal-dialog" role="document">
@@ -238,9 +263,27 @@
                                         <span style="color: green">ACTIVATED</span>
                                     @else
                                         <span style="color: red">INACTIVE</span>
-                                        <a class="d-flex ml-2 instant-activate">
+                                        {{-- <a class="d-flex ml-2 instant-activate">
                                             <i class="fa fa-unlock"></i>
                                             <span>Activate</span>
+                                        </a> --}}
+                                    @endif
+
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-6 text-right">
+                                    <span>Email Verified:</span>
+                                </div>
+                                <div class="col-6 d-flex" style="align-items: center;">
+                                    @if (Auth::user()->is_email_verified)
+                                        <span style="color: green">VERIFIED</span>
+                                    @else
+                                        <span style="color: red">NOT VERIFIED</span>
+                                        <br>
+                                        <a class="d-flex ml-2 instant-activate">
+                                            <i class="fa fa-envelope" style="margin-right: 3px;"></i>
+                                            <span>Verify By Email</span>
                                         </a>
                                     @endif
 
@@ -356,6 +399,27 @@
                         $('#dvBtnChangePsd').show();
                     }
                 }
+
+                function sendVerifyEmail() {
+                    const url = "{{ route('api.auth.sendVerifyEmail') }}";
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                        },
+                        success: function(res) {
+                            if (res.code) {
+                                toastMessage('error', res.message ?? 'An error occured while updating password');
+                            } else {
+                                toastMessage('success', 'Sent verification email, you can check in your mailbox!');
+                            }
+                        },
+                        error: function(msg) {
+                            toastMessage('error', msg.message ?? 'An error occured while updating password');
+                        }
+                    });
+                }
             </script>
         @endauth
         <footer class="footer3 client-footer">
@@ -367,13 +431,15 @@
                             <div class="widget mb-0">
                                 <div class="textwidget">
                                     <div class="row ">
-                                        <div
-                                            class="col-lg-6 col-md-12  mb-4 mb-lg-0">
-                                            <img class="img-fluid" src="images/logo_white.png" alt="img" style="height: 40px;">
-                                            <p class="mb-0 text-white" style="margin-left: 20px;">Your home to unlimited lead access.</p>
+                                        <div class="col-lg-6 col-md-12  mb-4 mb-lg-0">
+                                            <img class="img-fluid" src="images/logo_white.png" alt="img"
+                                                style="height: 40px;">
+                                            <p class="mb-0 text-white" style="margin-left: 20px;">Your home to
+                                                unlimited lead access.</p>
                                         </div>
                                         <div class="col-lg-6 pl-lg-5 align-self-center text-right">
-                                            <a class="text-white" href="/privacy_policy" style="margin-right: 10px">Privacy Policy</a>
+                                            <a class="text-white" href="/privacy_policy"
+                                                style="margin-right: 10px">Privacy Policy</a>
                                             <a class="text-white" href="/terms" style="margin-right: 10px">Terms</a>
                                             <a class="text-white" href="/dont_sell_info">Don't Sell My Info</a>
                                         </div>

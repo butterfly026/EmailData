@@ -12,6 +12,21 @@
         <div id=":523" class="a3s aiL">
             <u></u>
             <div bgcolor="#F2F5F7">
+                <div
+                    style="
+                color: #fefefe;
+                display: none;
+                font-family: Open Sans, Helvetica, Arial, sans-serif;
+                font-size: 1px;
+                line-height: 1px;
+                max-height: 0px;
+                max-width: 0px;
+                opacity: 0;
+                overflow: hidden;
+              "
+                >
+                    You can find and convert the most accurate leads in B2B
+                </div>
                 <table
                     id="m_316391571955406009main"
                     width="100%"
@@ -187,7 +202,7 @@
                                                                 <br/>
                                                                 You will need your email address and the password you chose during signup to login.
                                                                 <br/>
-                                                                You can verify your email address with EmailData to Complete your registration by clicking the following button:
+                                                                You can visit our site by clicking the following button:
                                                                 <br/><br/>
                                                                 </p>
                                                                 <div
@@ -210,7 +225,7 @@
                                                 color: #0082ca;
                                               "
                                                                 >
-                                                                    <a href="https://emaildata.co/verifyEmail&code={{ $verifyCode }}" blank>Verify Email</a>
+                                                                    <a href="https://emaildata.co/signin">Emaildata</a>
                                                                 </div>
                                                                 <p
                                                                     style="

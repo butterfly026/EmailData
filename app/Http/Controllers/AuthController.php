@@ -35,6 +35,20 @@ class AuthController extends CustomBaseController
     {
         return view('auth.register');
     }
+    public function verifyEmailPage($verifCode, $email)
+    {
+        $user = User::where('email_verif_code', $verifCode)->first();
+        $errMsg = '';
+        if(empty($user)) {
+            $errMsg = "$email does not exist! Please sign up again with your correct email address!";
+            return view('auth.verifyEmail', compact('errMsg'));
+        }
+        $user->is_email_verified = true;
+        $user->mail_verified_at = now()->toDateTimeString();
+        $user->save();
+        return view('auth.verifyEmail');
+    }
+
 
     public function throttleKey(Request $request)
     {
@@ -88,23 +102,27 @@ class AuthController extends CustomBaseController
             'email' => 'required|email',
             'password' => 'required'
         ]);
-        $user = User::ifWhere($params, 'email')->where('is_email_verified', 1)->first();
-        if ($user)
+        $user = User::ifWhere($params, 'email')->first();
+        if ($user && $user->is_email_verified == 1)
             throw new Exception("Email already exists");
-        $user = User::create([
-            'email' => $params['email'],#
-            'password' => bcrypt($params['password']),
-        ]);
-        if (!$user || !Hash::check($params['password'], $user->password)) {
-            throw new Exception("Account or password error");
+        if (!$user) {
+            $user = User::create([
+                'email' => $params['email'],#
+                'password' => bcrypt($params['password']),
+            ]);
         }
+        
         $user->tokens()->where('name', 'customer')->delete();
-        Mail::to($user->email)->send(new SignupMail());
-        if (!Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
-            RateLimiter::hit($this->throttleKey($request));
+        $user->email_verif_code = Hash::make("id:$user->id.user:$user->email");
+        $user->email_verif_sent_at = now()->toDateTimeString();
+        $user->password = bcrypt($params['password']);
+        $user->save();
+        Mail::to($user->email)->send(new SignupMail($user->email_verif_code));
+        // if (!Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
+        //     RateLimiter::hit($this->throttleKey($request));
 
-            throw new Exception(__('auth.failed'));
-        }
+        //     throw new Exception(__('auth.failed'));
+        // }
         return [
             'user' => $user,
             'token' => ['access_token' => $user->createToken('customer', ['customer'])->plainTextToken],
@@ -121,6 +139,17 @@ class AuthController extends CustomBaseController
         // Cache::tags([CacheTagsEnum::OnlineStatus->value])->put($user->id, true, 70);
         return $user->toArray();
     }
+
+    public function sendVerifyEmail(Request $request)
+    {
+        $user = $this->getUser();
+        $user->email_verif_code = Hash::make("id:$user->id.user:$user->email");
+        $user->email_verif_sent_at = now()->toDateTimeString();
+        $user->save();
+        Mail::to($user->email)->send(new SignupMail($user->email_verif_code));
+        return "Success";
+    }
+    
 
     public function signout(Request $request)
     {

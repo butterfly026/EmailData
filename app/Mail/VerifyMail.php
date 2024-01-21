@@ -10,16 +10,14 @@ class SignupMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public string $verifyCode;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(string $verifyCode)
+    public function __construct()
     {
-        $this->verifyCode = $verifyCode;
     }
 
     /**
@@ -27,6 +25,6 @@ class SignupMail extends Mailable
      */
     public function build(): mixed
     {
-        return $this->subject('Welcome to Emaildata')->view('emails.customer.auth.signupEmail');
+        return $this->subject('Verify Email')->view('emails.customer.auth.verifyEmail');
     }
 }
