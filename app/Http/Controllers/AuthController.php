@@ -117,7 +117,7 @@ class AuthController extends CustomBaseController
         $user->email_verif_sent_at = now()->toDateTimeString();
         $user->password = bcrypt($params['password']);
         $user->save();
-        Mail::to($user->email)->send(new SignupMail($user->email_verif_code, $user->id));
+        Mail::to($user->email)->send(new SignupMail($user->email_verif_code));
         // if (!Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
         //     RateLimiter::hit($this->throttleKey($request));
 
@@ -146,7 +146,7 @@ class AuthController extends CustomBaseController
         $user->email_verif_code = Hash::make("id:$user->id.user:$user->email");
         $user->email_verif_sent_at = now()->toDateTimeString();
         $user->save();
-        Mail::to($user->email)->send(new SignupMail($user->email_verif_code, $user->id));
+        Mail::to($user->email)->send(new SignupMail($user->email_verif_code));
         return "Success";
     }
     

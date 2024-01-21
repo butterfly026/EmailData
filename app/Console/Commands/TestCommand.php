@@ -33,7 +33,7 @@ class TestCommand extends Command
         $id = $this->argument('id');
         if (!$id)
             $id = 1;
-        Mail::to('drollmatt26@outlook.com')->send(new SignupMail('123123', $id));
+        Mail::to('drollmatt26@outlook.com')->send(new SignupMail('123123'));
         return Command::SUCCESS;
     }
 }
