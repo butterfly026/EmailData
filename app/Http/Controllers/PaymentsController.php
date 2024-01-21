@@ -211,6 +211,13 @@ class PaymentsController extends CustomBaseController
             'country' => 'required|string',
             'zipcode' => 'required|string',
         ]);
+        $setting = Settings::where('key', 'payments')->first();
+        if(!$setting) {
+            Err::throw('Contact to administrator to pay out!!');
+        }
+        $config = json_decode($setting->value, true);
+        
+        $amount = $config['pay_amount'] ?? 200;
         $payment = Payments::create([
             'user_email' => $params['user_email'],
             'card_number'=> $params['card_number'],
@@ -218,6 +225,7 @@ class PaymentsController extends CustomBaseController
             'cvc'=> $params['cvc'],
             'country'=> $params['country'],
             'zipcode'=> $params['zipcode'],
+            'amount' => $amount,
             'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
             'ordered_at' => now()->toDateTimeString()
         ]);
