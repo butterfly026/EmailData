@@ -291,7 +291,9 @@ class PaymentsController extends CustomBaseController
 
         $payment = Payments::where('order_no', $params['order_no'])->first();
         if($payment) {
-            return $payment->pay_elements;
+            return [
+                'data' => $payment->pay_elements
+            ];
         } else {
             Err::throw('Can not find payment from order number!');
         }
