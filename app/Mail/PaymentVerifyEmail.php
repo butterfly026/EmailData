@@ -10,7 +10,7 @@ class PaymentVerifyEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public int $order_no;
+    public string $order_no;
     public string $name;
     public float $amount;
 
@@ -19,7 +19,7 @@ class PaymentVerifyEmail extends Mailable
      *
      * @return void
      */
-    public function __construct(int $order_no, float $amount, string $email)
+    public function __construct(string $order_no, float $amount, string $email)
     {
         $this->order_no = $order_no;
         $this->name = substr($email, 0, strrpos($email, '@'));
