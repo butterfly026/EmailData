@@ -74,7 +74,7 @@ class PaymentsController extends CustomBaseController
         $UserEmail = $payment->user_email;
         $PayElements = $payment->pay_elements;
         $PayAmount = $payment->amount;
-        $payment->confiremd_at = now()->toDateTimeString();
+        $payment->confirmed_at = now()->toDateTimeString();
         $payment->save();
         // $setting = Settings::where('key', 'payments')->first();
         // if (!$setting) {
