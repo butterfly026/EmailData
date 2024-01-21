@@ -8,13 +8,15 @@
         <div class="col-md-12">
             <div class="card">
 
-                <div class="card-body">
+                <div class="card-body" style="display: flex; flex-direction: column; justify-content:center; align-items: center;">
                     @if (empty($errMsg))
+                        <img src="/images/verification_email.png" style="height: 300px">
                         <div class="alert alert-success" role="alert">
                             {{ __('You are verified with your email address. Pleas Login with your account!') }}
                         </div>
                     @else 
-                        <div class="alert alert-success" role="alert">
+                        <img src="/images/error.png" style="height: 200px">
+                        <div class="alert alert-warning" role="alert">
                             {{ $errMsg }}
                         </div>
                     @endif
