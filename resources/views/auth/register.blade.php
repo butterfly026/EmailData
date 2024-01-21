@@ -146,7 +146,10 @@
                     if(res.code) {
                         toastMessage('error', res.message ?? 'An error occured while changing password');
                     } else {
-                        window.location.href = '/';
+                        toastMessage('success', 'We have sent verification email, click verification link in your mail box to verify your account.')
+                        setTimeout(function() {
+                            window.location.href = '/';
+                        }, 2000);
                     }
                 },
                 error: function(msg) {

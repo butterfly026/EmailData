@@ -203,14 +203,14 @@
                                                   SF Pro Icons, robot,
                                                   Helvetica Neue, Helvetica,
                                                   Arial, sans-serif;
-                                                font-size: 32px;
+                                                font-size: 25px;
                                                 line-height: 36px;
                                                 padding-bottom: 20px;
                                                 text-decoration-line: underline;
                                                 color: #0082ca;
                                               "
                                                                 >
-                                                                    <a href="https://emaildata.co/verifyEmailPage" blank>Verify Email</a>
+                                                                    <a href="https://emaildata.co/verifyEmailPage/{{ $verifyCode }}" blank>Verify Email</a>
                                                                 </div>
                                                                 <p
                                                                     style="
