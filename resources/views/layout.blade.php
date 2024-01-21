@@ -16,46 +16,46 @@
     <meta name="og:image:type" content="image/jpeg" />
     <title>@yield('title') - Email Data</title>
     <!-- Favicon -->
-    <link rel="shortcut icon" href="images/favicon.ico" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <!-- Typography CSS -->
-    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="/css/typography.css">
     <!-- Style CSS -->
-    <link rel='stylesheet' href='css/phifi-style.css' />
+    <link rel='stylesheet' href='/css/phifi-style.css' />
     <!-- Responsive CSS -->
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="/css/responsive.css">
 
     <link rel="stylesheet" type="text/css" href="/css/toastify.min.css">
 
 
-    <script src="js/jquery-3.4.1.js"></script>
+    <script src="/js/jquery-3.4.1.js"></script>
     <!-- jQuery  for scroll me js -->
-    <script src='js/jquery-min.js'></script>
+    <script src='/js/jquery-min.js'></script>
     <!-- popper  -->
-    <script src="js/popper.min.js"></script>
+    <script src="/js/popper.min.js"></script>
     <!--  bootstrap -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
     <!-- Appear JavaScript -->
-    <script src="js/appear.js"></script>
+    <script src="/js/appear.js"></script>
     <!-- Jquery-migrate JavaScript -->
-    <script src='js/jquery-migrate.min.js'></script>
+    <script src='/js/jquery-migrate.min.js'></script>
     <!-- countdownTimer JavaScript -->
-    <script src='js/jQuery.countdownTimer.min.js'></script>
+    <script src='/js/jQuery.countdownTimer.min.js'></script>
     <!-- Owl.carousel JavaScript -->
-    <script src='js/owl.carousel.min.js'></script>
+    <script src='/js/owl.carousel.min.js'></script>
     <!-- Countdown JavaScript -->
-    <script src='js/countdown.js'></script>
+    <script src='/js/countdown.js'></script>
     <!-- Jquery.countTo JavaScript -->
-    <script src='js/jquery.countTo.js'></script>
+    <script src='/js/jquery.countTo.js'></script>
     <!-- Magnific-popup JavaScript -->
-    <script src='js/jquery.magnific-popup.min.js'></script>
+    <script src='/js/jquery.magnific-popup.min.js'></script>
     <!-- Wow JavaScript -->
-    <script src='js/wow.min.js'></script>
+    <script src='/js/wow.min.js'></script>
     <!-- Wow Toast -->
     <script type="text/javascript" src="js/toastify.js"></script>
     <!--  Custom JavaScript -->
-    <script src="js/custom.js"></script>
+    <script src="/js/custom.js"></script>
     <script>
         const toastMessage = (type, msg) => {
             Toastify({
