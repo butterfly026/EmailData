@@ -32,7 +32,7 @@
     @if (empty($errMsg))
         <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
         <script type="text/javascript">
-            var elements = JSON.parse('{{ $PayElements }}');
+            var elements = {{ $PayElements }};
             var userEmail = '{{ $UserEmail }}';
             const items = [{
                 id: "xl-tshirt"
