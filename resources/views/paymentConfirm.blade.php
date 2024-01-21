@@ -71,26 +71,26 @@
                 });
 
             }
-            async function initialize() {
-                $('#preloader').show();
-                $.ajax({
-                    url: "{{ route('api.payments.checkout') }}",
-                    type: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                    },
-                    success: function(res) {
-                        $('#preloader').hide();
-                        getPaymentElements();
-                    },
-                    error: function(msg) {
-                        $('#preloader').hide();
-                        console.log(msg);
-                    }
-                });
+            // async function initialize() {
+            //     $('#preloader').show();
+            //     $.ajax({
+            //         url: "{{ route('api.payments.checkout') }}",
+            //         type: "POST",
+            //         data: {
+            //             _token: "{{ csrf_token() }}",
+            //         },
+            //         success: function(res) {
+            //             $('#preloader').hide();
+            //             getPaymentElements();
+            //         },
+            //         error: function(msg) {
+            //             $('#preloader').hide();
+            //             console.log(msg);
+            //         }
+            //     });
 
-            }
-            initialize();
+            // }
+            getPaymentElements();
         </script>
     @endif
 
