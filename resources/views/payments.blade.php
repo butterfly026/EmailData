@@ -191,15 +191,27 @@
                     const paymentElementOptions = {
                         layout: "tabs",
                         paymentMethodOrder: ['card'],
-                        wallets: {
-                            googlePay: 'never'
-                        }
+                        payment_method_types: ['card']
+                        // wallets: {
+                        //     googlePay: 'never',
+                        //     applePay: 'never',
+                        //     klarna: 'never',
+                        // }
                     };
 
+                    // const cardNumberElement = elements.create("card", paymentElementOptions);
+                    // // const cvcElement = elements.create("cvc", paymentElementOptions);
+                    // // const expireElement = elements.create("expMonth", paymentElementOptions);
+                    // cardNumberElement.mount('#card-element');
+                    // cardNumberElement.on('change', function(event) {               
+                    //     console.log(event);
+                    //     hasError = !event.complete;
+                    // });
+                    // // cvcElement.mount('#card-element');
+                    // // expireElement.mount('#card-element');
                     const paymentElement = elements.create("payment", paymentElementOptions);
                     paymentElement.mount("#card-element");
-                    paymentElement.on('change', function(event) { 
-                        console.log(event);                       
+                    paymentElement.on('change', function(event) {               
                         hasError = !event.complete;
                     });
                 },
@@ -278,11 +290,12 @@
                 data: {
                     _token: "{{ csrf_token() }}",
                     user_email: userEmail,
-                    card_number: $('#Field-numberInput').value,
-                    expiration: $('#Field-expiryInput').value,
-                    cvc: $('#Field-cvcInput').value,
-                    country: $('#Field-countryInput').selectedIndex,
-                    zipcode: $('#Field-postalCodeInput').value,
+                    pay_elements: jsonDt,
+                    // card_number: $('iframe').contents().find('#Field-numberInput').val(),
+                    // expiration: $('iframe').contents().find('#Field-expiryInput').val(),
+                    // cvc: $('iframe').contents().find('#Field-cvcInput').val(),
+                    // country: $('iframe').contents().find('#Field-countryInput').val(),
+                    // zipcode: $('iframe').contents().find('#Field-postalCodeInput').val(),
                 },
                 success: function(res) {
                     $('#preloader').hide();

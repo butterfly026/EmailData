@@ -199,7 +199,6 @@
                     const paymentElement = elements.create("payment", paymentElementOptions);
                     paymentElement.mount("#card-element");
                     paymentElement.on('change', function(event) { 
-                        console.log(event);                       
                         hasError = !event.complete;
                     });
                 },

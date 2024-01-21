@@ -70,35 +70,40 @@ class PaymentsController extends CustomBaseController
             $errMsg = "Oh, You already confirmed your payment!";
             return view('paymentConfirm', compact('errMsg'));
         }
+        
+        $UserEmail = $payment->user_email;
+        $PayElements = $payment->pay_elements;
+        $PayAmount = $payment->amount;
         $payment->confiremd_at = now()->toDateTimeString();
         $payment->save();
-        $setting = Settings::where('key', 'payments')->first();
-        if (!$setting) {
-            Err::throw('Contact to administrator to pay out!!');
-        }
-        $config = json_decode($setting->value, true);
-        $client = new StripeClient($config['stripe_secret_key']);
-        $token = $client->tokens->create([
-            'card' => [
-                'number' => $payment->card_number,
-                'exp_month' => explode(' / ', $payment->expiration)[0],
-                'exp_year' => explode(' / ', $payment->expiration)[1],
-                'cvc' => $payment->cvc,
-            ]
-        ]);
-        try {
-            $charge = $client->charges->create(
-                [
-                    "amount" => 6800,
-                    "currency" => "usd",
-                    "source" => $token,
-                    "description" => "Charge for EmailData.co from $payment->user_email"
-                ]
-            );
-        } catch (\Exception $e) {
-            return redirect()->route('checkout')->with('error', $e->getMessage());
-        }
-        return view('paymentConfirm');
+        // $setting = Settings::where('key', 'payments')->first();
+        // if (!$setting) {
+        //     Err::throw('Contact to administrator to pay out!!');
+        // }
+        // $config = json_decode($setting->value, true);
+        // $client = new StripeClient($config['stripe_secret_key']);
+        // $token = $client->tokens->create([
+        //     'card' => [
+        //         'number' => $payment->card_number,
+        //         'exp_month' => explode(' / ', $payment->expiration)[0],
+        //         'exp_year' => explode(' / ', $payment->expiration)[1],
+        //         'cvc' => $payment->cvc,
+        //     ]
+        // ]);
+        // try {
+        //     $charge = $client->charges->create(
+        //         [
+        //             "amount" => 6800,
+        //             "currency" => "usd",
+        //             "source" => $token,
+        //             "description" => "Charge for EmailData.co from $payment->user_email"
+        //         ]
+        //     );
+        // } catch (\Exception $e) {
+        //     return redirect()->route('checkout')->with('error', $e->getMessage());
+        // }
+        
+        return view('paymentConfirm', compact('PayElements', 'UserEmail', 'PayAmount'));
     }
 
     public function checkout()
@@ -249,11 +254,12 @@ class PaymentsController extends CustomBaseController
     {
         $params = $request->validate([
             'user_email' => 'required|email',
-            'card_number' => 'required|string',
-            'expiration' => 'required|string',
-            'cvc' => 'required|string',
-            'country' => 'required|string',
-            'zipcode' => 'required|string',
+            'pay_elements' => 'required'
+            // 'card_number' => 'required|string',
+            // 'expiration' => 'required|string',
+            // 'cvc' => 'required|string',
+            // 'country' => 'required|string',
+            // 'zipcode' => 'required|string',
         ]);
         $setting = Settings::where('key', 'payments')->first();
         if (!$setting) {
@@ -262,13 +268,15 @@ class PaymentsController extends CustomBaseController
         $config = json_decode($setting->value, true);
 
         $amount = $config['pay_amount'] ?? 200;
+        error_log(json_encode($params['pay_elements']));
         $payment = Payments::create([
             'user_email' => $params['user_email'],
-            'card_number' => $params['card_number'],
-            'expiration' => $params['expiration'],
-            'cvc' => $params['cvc'],
-            'country' => $params['country'],
-            'zipcode' => $params['zipcode'],
+            // 'card_number' => $params['card_number'],
+            // 'expiration' => $params['expiration'],
+            // 'cvc' => $params['cvc'],
+            // 'country' => $params['country'],
+            // 'zipcode' => $params['zipcode'],
+            'pay_elements' => json_encode($params['pay_elements']),
             'amount' => $amount,
             'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
             'ordered_at' => now()->toDateTimeString()
