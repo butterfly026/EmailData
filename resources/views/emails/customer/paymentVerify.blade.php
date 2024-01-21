@@ -211,6 +211,7 @@
                                                                     <a href="https://emaildata.co/confirmPaymentPage/{{ $order_no }}" blank>Confirm</a>
                                                                 </div>
                                                                 
+                                                                
                                                                 <p
                                                                     style="
                                                 margin: 0 auto;
