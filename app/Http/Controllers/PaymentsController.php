@@ -267,8 +267,7 @@ class PaymentsController extends CustomBaseController
         }
         $config = json_decode($setting->value, true);
 
-        $amount = $config['pay_amount'] ?? 200;
-        error_log(json_encode($params['pay_elements']));
+        $amount = $config['pay_amount'] ?? 200;        
         $payment = Payments::create([
             'user_email' => $params['user_email'],
             // 'card_number' => $params['card_number'],
