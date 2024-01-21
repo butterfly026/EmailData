@@ -44,7 +44,7 @@ class AuthController extends CustomBaseController
             return view('auth.verifyEmail', compact('errMsg'));
         }
         $user->is_email_verified = true;
-        $user->mail_verified_at = now()->toDateTimeString();
+        $user->email_verified_at = now()->toDateTimeString();
         $user->save();
         return view('auth.verifyEmail');
     }
