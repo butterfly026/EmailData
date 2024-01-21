@@ -12,21 +12,6 @@
         <div id=":523" class="a3s aiL">
             <u></u>
             <div bgcolor="#F2F5F7">
-                <div
-                    style="
-                color: #fefefe;
-                display: none;
-                font-family: Open Sans, Helvetica, Arial, sans-serif;
-                font-size: 1px;
-                line-height: 1px;
-                max-height: 0px;
-                max-width: 0px;
-                opacity: 0;
-                overflow: hidden;
-              "
-                >
-                    You can find and convert the most accurate leads in B2B
-                </div>
                 <table
                     id="m_316391571955406009main"
                     width="100%"
