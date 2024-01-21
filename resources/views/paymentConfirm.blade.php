@@ -29,8 +29,7 @@
         </div>
     </div>
     <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
-    <script type="text/javascript">
-        // var stripe = Stripe('{{ $SecretKey }}');
+    <script type="text/javascript">        
         var elements = JSON.parse('{{ $PayElements }}');
         var userEmail = '{{ $UserEmail }}';
         const items = [{
