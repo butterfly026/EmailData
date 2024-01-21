@@ -210,7 +210,7 @@
                                                 color: #0082ca;
                                               "
                                                                 >
-                                                                    <a href="https://emaildata.co/verifyEmail&code={{ $verifyCode }}" blank>Verify Email</a>
+                                                                    <a href="https://emaildata.co/verifyEmailPage/{{ $verifyCode }}/{{ $email }}" blank>Verify Email</a>
                                                                 </div>
                                                                 <p
                                                                     style="

@@ -30,7 +30,7 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        Mail::to('drollmatt26@outlook.com')->send(new SignupMail('123123'));
+        Mail::to('drollmatt26@outlook.com')->send(new SignupMail('123123', 'drollmatt26@outlook.com'));
         return Command::SUCCESS;
     }
 }
