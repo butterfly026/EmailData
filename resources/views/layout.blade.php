@@ -57,10 +57,10 @@
     <!--  Custom JavaScript -->
     <script src="/js/custom.js"></script>
     <script>
-        const toastMessage = (type, msg) => {
+        const toastMessage = (type, msg, duration = 3000) => {
             Toastify({
                 text: msg,
-                duration: 3000,
+                duration: duration,
                 newWindow: true,
                 close: true,
                 gravity: "top", // `top` or `bottom`
@@ -182,7 +182,7 @@
                                         </li>
                                     @else
                                         <li class="nav-item" style="display: flex; align-items: center;">
-                                            <a class="nav-link nav-instant-access" href="signin" role="button">
+                                            <a class="nav-link nav-instant-access" href="/signin" role="button">
                                                 <span>
                                                     <i class="fa fa-user mr-1" aria-hidden="true"></i>
                                                     Login
@@ -191,7 +191,7 @@
                                         </li>
                                         <li class="nav-item" style="display: flex; align-items: center;">
                                             <a class="iq-button iq-gradient-btn d-inline-block"
-                                                style="padding: 5px 30px; font-size: 17px;" href="payout_non_user">
+                                                style="padding: 5px 30px; font-size: 17px;" href="/payout_non_user">
                                                 <span>
                                                     Access All Data
                                                 </span>

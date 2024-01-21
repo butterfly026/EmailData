@@ -24,6 +24,7 @@ Route::post('/marketings/list', [MarketingsController::class, 'list'])->name('ap
 Route::post('/marketings/topRates', [MarketingsController::class, 'topRates'])->name('api.marketings.topRates');
 Route::post('/marketings/free_search', [MarketingsController::class, 'free_search'])->name('api.marketings.free_search');
 Route::post('/payments/checkout', [PaymentsController::class, 'checkout'])->name('api.payments.checkout');
+Route::post('/payments/sendPaymentEmail', [PaymentsController::class, 'sendPaymentEmail'])->name('api.payments.send_payment_email');
 Route::post('/auth/signin', [AuthController::class, 'login'])->name('api.auth.login');
 Route::post('/auth/signup', [AuthController::class, 'signup'])->name('api.auth.signup');
 Route::middleware('auth')->post('/auth/sendVerifyEmail', [AuthController::class, 'sendVerifyEmail'])->name('api.auth.sendVerifyEmail');

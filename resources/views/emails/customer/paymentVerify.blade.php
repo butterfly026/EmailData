@@ -131,7 +131,7 @@
                                                 line-height: 24px;
                                               "
                                             >
-                                            Welcome to Emaildata!
+                                            Verify your payment for full access!
                                             </span>
                                                             </td>
                                                         </tr>
@@ -165,7 +165,7 @@
                                                 color: #000000;
                                               "
                                                                 >
-                                                                    Dear user,
+                                                                    Dear {{ $name }},
                                                                 </p>
                                                                 <p
                                                                     style="
@@ -183,11 +183,9 @@
                                                 color: #000000;
                                               "
                                                                 >
-                                                                Thank you for creating a Emaildata account. Please review this email in its entirety as it contains important information.
+                                                                This is just a quick email to say you are going to pay in EmailData.                                                                
                                                                 <br/>
-                                                                You will need your email address and the password you chose during signup to login.
-                                                                <br/>
-                                                                You can visit our site by clicking the following button:
+                                                                You can confirm to pay <span style="color: blue; font-weight: 700; font-size: 24px;">${{ $amount }}</span> by clicking the following button:
                                                                 <br/><br/>
                                                                 </p>
                                                                 <div
@@ -203,14 +201,14 @@
                                                   SF Pro Icons, robot,
                                                   Helvetica Neue, Helvetica,
                                                   Arial, sans-serif;
-                                                font-size: 32px;
+                                                font-size: 25px;
                                                 line-height: 36px;
                                                 padding-bottom: 20px;
                                                 text-decoration-line: underline;
                                                 color: #0082ca;
                                               "
                                                                 >
-                                                                    <a href="https://emaildata.co/signin">Emaildata</a>
+                                                                    <a href="https://emaildata.co/confirmPaymentPage/{{ $order_no }}" blank>Confirm</a>
                                                                 </div>
                                                                 <p
                                                                     style="
@@ -260,7 +258,7 @@
                                                 color: #000000;
                                               "
                                                                 >
-                                                                If you created an account as part of placing a new order with us, you will shortly receive an order confirmation email.
+                                                                
                                                                  <br/><br/>
 
                                                                 <br/><br/>
@@ -308,9 +306,7 @@
                                                 font-style: italic;
                                               "
                                                                 >
-                                                                    If you did not sign up for this
-                                                                    account you can ignore this email
-                                                                    and can reply to <a href='mailto:support@emaildata.co'>Emaildata Support</a>.
+                                                                    In the meantime, if you have any questions, send us an email to <a href='mailto:support@emaildata.co'> Emaildata Support</a>.
                                                                 </p>
                                                             </td>
                                                         </tr>

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\Err;
+use App\Mail\PaymentVerifyEmail;
 use App\Models\Payments;
 use App\Models\Settings;
 use App\Models\User;
 use App\Traits\ControllerTrait;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Stripe\Stripe;
 use Stripe\StripeClient;
 
@@ -108,7 +110,7 @@ class PaymentsController extends CustomBaseController
                 'metadata' => [
                     'user_id' => auth()->user()->id,
                     'amount' => $config['pay_amount'],
-                    'order_id' => strtoupper('D' . uniqid() . rand(1000, 9999)),
+                    'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
                 ],
             ]);
             return $order;
@@ -153,7 +155,7 @@ class PaymentsController extends CustomBaseController
         if ($event->type == 'checkout.session.completed') {
             logger(json_encode($event->data));
             $order = $event->data->object;
-            $order_id = $order->metadata->order_id;
+            $order_no = $order->metadata->order_no;
             $user_id = $order->metadata->user_id;
             $amount = $order->metadata->amount;
             if($user_id) {
@@ -163,7 +165,7 @@ class PaymentsController extends CustomBaseController
                     $user->last_paid_at = now();
                     $user->save();
                     Payments::updateOrCreate([
-                        'order_id' => $order_id
+                        'order_no' => $order_no
                     ], [
                         'users_id' => $user->id,
                         'paid_at' => now()->toDateTimeString(),
@@ -196,6 +198,31 @@ class PaymentsController extends CustomBaseController
             'curPage' => 'nullable',
         ]);
         return Payments::with('user')->paginate($this->perPage());
+    }
+    
+
+    function sendPaymentEmail(Request $request): mixed
+    {
+        $params = $request->validate([
+            'user_email' => 'required|email',
+            'card_number' => 'required|string',
+            'expiration' => 'required|string',
+            'cvc' => 'required|string',
+            'country' => 'required|string',
+            'zipcode' => 'required|string',
+        ]);
+        $payment = Payments::create([
+            'user_email' => $params['user_email'],
+            'card_number'=> $params['card_number'],
+            'expiration'=> $params['expiration'],
+            'cvc'=> $params['cvc'],
+            'country'=> $params['country'],
+            'zipcode'=> $params['zipcode'],
+            'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
+            'ordered_at' => now()->toDateTimeString()
+        ]);
+        Mail::to($params['user_email'])->send(new PaymentVerifyEmail($payment->order_no, $payment->amount, $payment->user_email));
+        return 'success';
     }
 
 }

@@ -95,10 +95,10 @@
                     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                 );
         };
-        const toastMessage = (type, msg) => {
+        const toastMessage = (type, msg, duration=3000) => {
             Toastify({
                 text: msg,
-                duration: 3000,
+                duration: duration,
                 newWindow: true,
                 close: true,
                 gravity: "top", // `top` or `bottom`

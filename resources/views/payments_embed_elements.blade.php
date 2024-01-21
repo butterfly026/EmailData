@@ -278,11 +278,7 @@
                 data: {
                     _token: "{{ csrf_token() }}",
                     user_email: userEmail,
-                    card_number: $('#Field-numberInput').value,
-                    expiration: $('#Field-expiryInput').value,
-                    cvc: $('#Field-cvcInput').value,
-                    country: $('#Field-countryInput').selectedIndex,
-                    zipcode: $('#Field-postalCodeInput').value,
+                    data: jsonDt
                 },
                 success: function(res) {
                     $('#preloader').hide();

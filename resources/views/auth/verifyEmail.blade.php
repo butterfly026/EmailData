@@ -12,7 +12,7 @@
                     @if (empty($errMsg))
                         <img src="/images/verification_email.png" style="height: 300px">
                         <div class="alert alert-success" role="alert">
-                            {{ __('You are verified with your email address. Pleas Login with your account!') }}
+                            {{ __('You are verified with your email address. Please Login with your email and password!') }}
                         </div>
                     @else 
                         <img src="/images/error.png" style="height: 200px">

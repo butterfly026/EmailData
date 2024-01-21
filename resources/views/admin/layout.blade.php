@@ -66,10 +66,10 @@
         <script src="js/custom.js"></script>
 
         <script>
-            const toastMessage = (type, msg) => {
+            const toastMessage = (type, msg, duration = 3000) => {
                 Toastify({
                     text: msg,
-                    duration: 3000,
+                    duration: duration,
                     newWindow: true,
                     close: true,
                     gravity: "top", // `top` or `bottom`
