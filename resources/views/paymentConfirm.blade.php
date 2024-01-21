@@ -14,7 +14,8 @@
                         @if (empty($errMsg))
                             <img src="/images/verification_email.png" style="height: 300px">
                             <div class="alert alert-success" role="alert">
-                                Thank you for paying <span>${{ $PayAmount }}</span> for EmailData, you can fully access marketing leads.
+                                Thank you for paying <span>${{ $PayAmount }}</span> for EmailData, you can fully access
+                                marketing leads.
                                 {{ __('') }}
                             </div>
                         @else
@@ -28,49 +29,50 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
-    <script type="text/javascript">        
-        var elements = JSON.parse('{{ $PayElements }}');
-        var userEmail = '{{ $UserEmail }}';
-        const items = [{
-            id: "xl-tshirt"
-        }];
-        let hasError = false;
-        
-        async function payout() {
-            const {
-                error
-            } = await stripe.confirmPayment({
-                elements,
-                confirmParams: {
-                    // Make sure to change this to your payment completion page
-                    //return_url: "{{ route('payments.paySuccess') }}",
-                    receipt_email: userEmail ?? '',
-                },
-            });
-        }
+    @if (empty($errMsg))
+        <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+        <script type="text/javascript">
+            var elements = JSON.parse('{{ $PayElements }}');
+            var userEmail = '{{ $UserEmail }}';
+            const items = [{
+                id: "xl-tshirt"
+            }];
+            let hasError = false;
 
-        async function initialize() {
-            $('#preloader').show();
-            $.ajax({
-                url: "{{ route('api.payments.checkout') }}",
-                type: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                },
-                success: function(res) {
-                    $('#preloader').hide();
-                    payout();
-                },
-                error: function(msg) {
-                    $('#preloader').hide();
-                    console.log(msg);
-                }
-            });
+            async function payout() {
+                const {
+                    error
+                } = await stripe.confirmPayment({
+                    elements,
+                    confirmParams: {
+                        // Make sure to change this to your payment completion page
+                        //return_url: "{{ route('payments.paySuccess') }}",
+                        receipt_email: userEmail ?? '',
+                    },
+                });
+            }
 
-        }
-        initialize();
+            async function initialize() {
+                $('#preloader').show();
+                $.ajax({
+                    url: "{{ route('api.payments.checkout') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                    },
+                    success: function(res) {
+                        $('#preloader').hide();
+                        payout();
+                    },
+                    error: function(msg) {
+                        $('#preloader').hide();
+                        console.log(msg);
+                    }
+                });
 
-        
-    </script>
+            }
+            initialize();
+        </script>
+    @endif
+
 @endsection
