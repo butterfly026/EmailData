@@ -102,7 +102,7 @@ class PaymentsController extends CustomBaseController
         // } catch (\Exception $e) {
         //     return redirect()->route('checkout')->with('error', $e->getMessage());
         // }
-        
+        error_log($PayElements);
         return view('paymentConfirm', compact('PayElements', 'UserEmail', 'PayAmount'));
     }
 
