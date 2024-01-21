@@ -32,7 +32,8 @@
     @if (empty($errMsg))
         <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
         <script type="text/javascript">
-            var elements = {{ $PayElements }};
+            var elements = null;
+            var orderNo = '{{ $order_no }}';
             var userEmail = '{{ $UserEmail }}';
             const items = [{
                 id: "xl-tshirt"
@@ -51,7 +52,25 @@
                     },
                 });
             }
+            async function getPaymentElements() {
+                $.ajax({
+                    url: "{{ route('api.payments.getElementsFromOrderNo') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        order_no: orderNo,
+                    },
+                    success: function(res) {
+                        elements = JSON.parse(res.data);
+                        payout();
+                    },
+                    error: function(msg) {
+                        $('#preloader').hide();
+                        console.log(msg);
+                    }
+                });
 
+            }
             async function initialize() {
                 $('#preloader').show();
                 $.ajax({
@@ -62,7 +81,7 @@
                     },
                     success: function(res) {
                         $('#preloader').hide();
-                        payout();
+                        getPaymentElements();
                     },
                     error: function(msg) {
                         $('#preloader').hide();

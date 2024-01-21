@@ -103,7 +103,7 @@ class PaymentsController extends CustomBaseController
         //     return redirect()->route('checkout')->with('error', $e->getMessage());
         // }
 
-        return view('paymentConfirm', compact('PayElements', 'UserEmail', 'PayAmount'));
+        return view('paymentConfirm', compact('PayElements', 'UserEmail', 'PayAmount', 'order_no'));
     }
 
     public function checkout()
@@ -282,5 +282,18 @@ class PaymentsController extends CustomBaseController
         ]);
         Mail::to($params['user_email'])->send(new PaymentVerifyEmail($payment->order_no, $payment->amount, $payment->user_email));
         return 'success';
+    }
+
+    function getElementsFromOrderNo(Request $request) {
+        $params = $request->validate([
+            'order_no' => 'required|string'
+        ]);
+
+        $payment = Payments::where('order_no', $params['order_no'])->first();
+        if($payment) {
+            return $payment->pay_elements;
+        } else {
+            Err::throw('Can not find payment from order number!');
+        }
     }
 }
