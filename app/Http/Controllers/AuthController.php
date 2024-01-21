@@ -35,12 +35,12 @@ class AuthController extends CustomBaseController
     {
         return view('auth.register');
     }
-    public function verifyEmailPage($verifCode, $email)
+    public function verifyEmailPage($verifCode)
     {
         $user = User::where('email_verif_code', $verifCode)->first();
         $errMsg = '';
         if(empty($user)) {
-            $errMsg = "$email does not exist! Please sign up again with your correct email address!";
+            $errMsg = "User does not exist! Please sign up again with your correct email address!";
             return view('auth.verifyEmail', compact('errMsg'));
         }
         $user->is_email_verified = true;
@@ -117,7 +117,7 @@ class AuthController extends CustomBaseController
         $user->email_verif_sent_at = now()->toDateTimeString();
         $user->password = bcrypt($params['password']);
         $user->save();
-        Mail::to($user->email)->send(new SignupMail($user->email_verif_code, $user->email));
+        Mail::to($user->email)->send(new SignupMail($user->email_verif_code, $user->id));
         // if (!Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
         //     RateLimiter::hit($this->throttleKey($request));
 
@@ -146,7 +146,7 @@ class AuthController extends CustomBaseController
         $user->email_verif_code = Hash::make("id:$user->id.user:$user->email");
         $user->email_verif_sent_at = now()->toDateTimeString();
         $user->save();
-        Mail::to($user->email)->send(new SignupMail($user->email_verif_code, $user->email));
+        Mail::to($user->email)->send(new SignupMail($user->email_verif_code, $user->id));
         return "Success";
     }
     

@@ -14,7 +14,7 @@ class TestCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'TestCommand';
+    protected $signature = 'TestCommand {id}';
 
     /**
      * The console command description.
@@ -30,7 +30,10 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        Mail::to('drollmatt26@outlook.com')->send(new SignupMail('123123', 'drollmatt26@outlook.com'));
+        $id = $this->argument('id');
+        if (!$id)
+            $id = 1;
+        Mail::to('drollmatt26@outlook.com')->send(new SignupMail('123123', $id));
         return Command::SUCCESS;
     }
 }
