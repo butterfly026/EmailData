@@ -74,13 +74,15 @@ class PaymentsController extends CustomBaseController
         $UserEmail = $payment->user_email;
         $PayElements = json_decode($payment->pay_elements);
         $PayAmount = $payment->amount;
+        $setting = Settings::where('key', 'payments')->first();
+        if (!$setting) {
+            Err::throw('Contact to administrator to pay out!!');
+        }
+        $config = json_decode($setting->value, true);
+        $StripeKey = $config['stripe_api_key'];
+        
         $payment->confirmed_at = now()->toDateTimeString();
         $payment->save();
-        // $setting = Settings::where('key', 'payments')->first();
-        // if (!$setting) {
-        //     Err::throw('Contact to administrator to pay out!!');
-        // }
-        // $config = json_decode($setting->value, true);
         // $client = new StripeClient($config['stripe_secret_key']);
         // $token = $client->tokens->create([
         //     'card' => [
@@ -103,7 +105,7 @@ class PaymentsController extends CustomBaseController
         //     return redirect()->route('checkout')->with('error', $e->getMessage());
         // }
 
-        return view('paymentConfirm', compact('PayElements', 'UserEmail', 'PayAmount', 'order_no'));
+        return view('paymentConfirm', compact('UserEmail', 'PayAmount', 'order_no', 'StripeKey'));
     }
 
     public function checkout()
