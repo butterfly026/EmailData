@@ -72,7 +72,7 @@ class PaymentsController extends CustomBaseController
         }
         
         $UserEmail = $payment->user_email;
-        $PayElements = $payment->pay_elements;
+        $PayElements = json_decode($payment->pay_elements);
         $PayAmount = $payment->amount;
         $payment->confirmed_at = now()->toDateTimeString();
         $payment->save();
