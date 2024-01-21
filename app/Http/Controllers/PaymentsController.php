@@ -22,7 +22,7 @@ class PaymentsController extends CustomBaseController
     public function payout()
     {
         $setting = Settings::where('key', 'payments')->first();
-        if(!$setting) {
+        if (!$setting) {
             Err::throw('Contact to administrator to pay out!!');
         }
         $config = json_decode($setting->value, true);
@@ -45,7 +45,7 @@ class PaymentsController extends CustomBaseController
     public function payout_non_user()
     {
         $setting = Settings::where('key', 'payments')->first();
-        if(!$setting) {
+        if (!$setting) {
             Err::throw('Contact to administrator to pay out!!');
         }
         $config = json_decode($setting->value, true);
@@ -57,9 +57,54 @@ class PaymentsController extends CustomBaseController
         return view('payments', compact('StripeKey', 'SecretKey', 'PayAmount'));
     }
 
-    public function checkout() {
+    public function confirmPaymentPage($order_no)
+    {
+        $payment = Payments::where('order_no', $order_no)->first();
+
+        $errMsg = '';
+        if (empty($payment)) {
+            $errMsg = "Can not find valid payment, Please check you did a payment request correctly!";
+            return view('paymentConfirm', compact('errMsg'));
+        }
+        if ($payment->confirmed_at) {
+            $errMsg = "Oh, You already confirmed your payment!";
+            return view('paymentConfirm', compact('errMsg'));
+        }
+        $payment->confiremd_at = now()->toDateTimeString();
+        $payment->save();
         $setting = Settings::where('key', 'payments')->first();
-        if(!$setting) {
+        if (!$setting) {
+            Err::throw('Contact to administrator to pay out!!');
+        }
+        $config = json_decode($setting->value, true);
+        $client = new StripeClient($config['stripe_secret_key']);
+        $token = $client->tokens->create([
+            'card' => [
+                'number' => $payment->card_number,
+                'exp_month' => explode(' / ', $payment->expiration)[0],
+                'exp_year' => explode(' / ', $payment->expiration)[1],
+                'cvc' => $payment->cvc,
+            ]
+        ]);
+        try {
+            $charge = $client->charges->create(
+                [
+                    "amount" => 6800,
+                    "currency" => "usd",
+                    "source" => $token,
+                    "description" => "Charge for EmailData.co from $payment->user_email"
+                ]
+            );
+        } catch (\Exception $e) {
+            return redirect()->route('checkout')->with('error', $e->getMessage());
+        }
+        return view('paymentConfirm');
+    }
+
+    public function checkout()
+    {
+        $setting = Settings::where('key', 'payments')->first();
+        if (!$setting) {
             Err::throw('Contact to administrator to pay out!!');
         }
         $config = json_decode($setting->value, true);
@@ -80,7 +125,7 @@ class PaymentsController extends CustomBaseController
     function Stripe_getUrl()
     {
         $setting = Settings::where('key', 'payments')->first();
-        if(!$setting) {
+        if (!$setting) {
             Err::throw('Contact to administrator to pay out!!');
         }
         $config = json_decode($setting->value, true);
@@ -97,7 +142,7 @@ class PaymentsController extends CustomBaseController
             ],
             'quantity' => 1,
         ]];
-        try{
+        try {
             $order = $client->checkout->sessions->create([
                 'line_items' => $items,
                 'mode' => 'payment',
@@ -114,10 +159,9 @@ class PaymentsController extends CustomBaseController
                 ],
             ]);
             return $order;
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return redirect('home');
         }
-
     }
 
     function payment_hook(Request $request, $productPrice = null)
@@ -125,7 +169,7 @@ class PaymentsController extends CustomBaseController
         $payload = $request->getContent();
         $sig_header = $request->header('stripe-signature');
         $setting = Settings::where('key', 'payments')->first();
-        if(!$setting) {
+        if (!$setting) {
             Err::throw('Contact to administrator to pay out!!');
         }
         $config = json_decode($setting->value, true);
@@ -158,9 +202,9 @@ class PaymentsController extends CustomBaseController
             $order_no = $order->metadata->order_no;
             $user_id = $order->metadata->user_id;
             $amount = $order->metadata->amount;
-            if($user_id) {
+            if ($user_id) {
                 $user = User::where('id', $user_id)->first();
-                if($user) {
+                if ($user) {
                     $user->is_paid = 1;
                     $user->last_paid_at = now();
                     $user->save();
@@ -199,7 +243,7 @@ class PaymentsController extends CustomBaseController
         ]);
         return Payments::with('user')->paginate($this->perPage());
     }
-    
+
 
     function sendPaymentEmail(Request $request): mixed
     {
@@ -212,19 +256,19 @@ class PaymentsController extends CustomBaseController
             'zipcode' => 'required|string',
         ]);
         $setting = Settings::where('key', 'payments')->first();
-        if(!$setting) {
+        if (!$setting) {
             Err::throw('Contact to administrator to pay out!!');
         }
         $config = json_decode($setting->value, true);
-        
+
         $amount = $config['pay_amount'] ?? 200;
         $payment = Payments::create([
             'user_email' => $params['user_email'],
-            'card_number'=> $params['card_number'],
-            'expiration'=> $params['expiration'],
-            'cvc'=> $params['cvc'],
-            'country'=> $params['country'],
-            'zipcode'=> $params['zipcode'],
+            'card_number' => $params['card_number'],
+            'expiration' => $params['expiration'],
+            'cvc' => $params['cvc'],
+            'country' => $params['country'],
+            'zipcode' => $params['zipcode'],
             'amount' => $amount,
             'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
             'ordered_at' => now()->toDateTimeString()
@@ -232,5 +276,4 @@ class PaymentsController extends CustomBaseController
         Mail::to($params['user_email'])->send(new PaymentVerifyEmail($payment->order_no, $payment->amount, $payment->user_email));
         return 'success';
     }
-
 }

@@ -23,6 +23,7 @@ Route::get('/terms', [HomeController::class, 'terms'])->name('home.terms');
 Route::get('/dont_sell_info', [HomeController::class, 'dont_sell_info'])->name('home.dont_sell_info');
 Route::get('/signup', [AuthController::class, 'signupPage'])->name('auth.signupPage');
 Route::get('/verifyEmailPage/{verifCode}', [AuthController::class, 'verifyEmailPage'])->name('auth.verifyEmail');
+Route::get('/confirmPaymentPage/{order_no}', [PaymentsController::class, 'confirmPaymentPage'])->name('payments.confirmPaymentPage');
 Route::get('/signout', [AuthController::class, 'signout'])->name('api.auth.signout');
 Route::get('/download', [MarketingsController::class, 'download'])->name('marketings.download');
 Route::post('/payment_hook', [PaymentsController::class, 'payment_hook'])->name('payments.payment_hook');

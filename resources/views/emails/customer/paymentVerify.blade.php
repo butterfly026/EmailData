@@ -226,6 +226,26 @@
                                                 font-weight: normal;
                                                 color: #000000;
                                               "
+                                                                >
+                                                                
+
+                                                                <br/><br/>
+                                                                </p>
+                                                                <p
+                                                                    style="
+                                                margin: 0 auto;
+                                                word-break: break-word;
+                                                text-align: left;
+                                                width: 90%;
+                                                font-family: SF Pro Text,
+                                                  SF Pro Icons, robot,
+                                                  Helvetica Neue, Helvetica,
+                                                  Arial, sans-serif;
+                                                font-size: 14px;
+                                                line-height: 20px;
+                                                font-weight: normal;
+                                                color: #000000;
+                                              "
                                                                 ></p>
                                                             </td>
                                                         </tr>

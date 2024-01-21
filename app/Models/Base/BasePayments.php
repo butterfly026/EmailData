@@ -34,7 +34,7 @@ class BasePayments extends Model
     protected $table = 'payments';
     protected string $comment = 'payments';
 
-    protected $fillable = ['users_id', 'user_email', 'card_number', 'expiration', 'cvc', 'country', 'zipcode', 'amount', 'pay_elements', 'ordered_at', 'order_no', 'paid_at'];
+    protected $fillable = ['users_id', 'user_email', 'card_number', 'expiration', 'cvc', 'country', 'zipcode', 'amount', 'pay_elements', 'confirmed_at', 'order_no', 'paid_at'];
 
     public function user(): Relations\BelongsTo
     {
