@@ -8,6 +8,7 @@ use App\Models\Settings;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PaymentNextMonthEmail;
 use App\Exceptions\Err;
+use Exception;
 
 class AutoSendPaymentEmailCommand extends Command
 {
@@ -44,7 +45,11 @@ class AutoSendPaymentEmailCommand extends Command
         // $client = new StripeClient($config['stripe_secret_key']);
         $amount = $config['pay_amount'] ?? 200;     
         foreach($users as $user) {
-            Mail::to($user->email)->send(new PaymentNextMonthEmail($user->expired_at, $amount, $user->email));
+            try{
+                Mail::to($user->email)->send(new PaymentNextMonthEmail($user->expired_at, $amount, $user->email));
+            } catch(Exception $e) {
+            }
+            
         }
         return Command::SUCCESS;
     }

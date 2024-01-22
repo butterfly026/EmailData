@@ -151,7 +151,11 @@ class AuthController extends CustomBaseController
         $user->email_verif_code = md5(uniqid(rand(), true));
         $user->email_verif_sent_at = now()->toDateTimeString();
         $user->save();
-        Mail::to($user->email)->send(new SignupMail($user->email_verif_code));
+        try {
+            Mail::to($user->email)->send(new SignupMail($user->email_verif_code));
+        }catch(Exception $e) {
+
+        }
         return "Success";
     }
     

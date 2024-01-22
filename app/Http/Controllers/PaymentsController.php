@@ -40,7 +40,7 @@ class PaymentsController extends CustomBaseController
         $StripeKey = $config['stripe_api_key'];
         $SecretKey = $config['stripe_secret_key'];
         $PayAmount = $config['pay_amount'] ?? 200;
-        return view('payments', compact('StripeKey', 'SecretKey', 'PayAmount'));
+        return view('payout', compact('StripeKey', 'SecretKey', 'PayAmount'));
     }
 
     public function payout_non_user()
@@ -55,7 +55,7 @@ class PaymentsController extends CustomBaseController
         $StripeKey = $config['stripe_api_key'];
         $SecretKey = $config['stripe_secret_key'];
         $PayAmount = $config['pay_amount'] ?? 200;
-        return view('payments', compact('StripeKey', 'SecretKey', 'PayAmount'));
+        return view('payout', compact('StripeKey', 'SecretKey', 'PayAmount'));
     }
 
     public function myPaymentsPage() {
