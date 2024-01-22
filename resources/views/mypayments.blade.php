@@ -12,7 +12,7 @@
                 <div class="row">
                     <div class="col-lg-9 col-md-9">
                         <div class="text-left iq-title-box pr-lg-5" style="margin-bottom: 5px;">
-                            <h2 class="iq-title text-uppercase">Payments Data</h2>
+                            <h2 class="iq-title text-uppercase">Payments History</h2>
                             <p class="iq-line three"></p>
                         </div>
                     </div>
