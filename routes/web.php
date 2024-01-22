@@ -14,6 +14,7 @@ Route::middleware('auth')->get('/users_management', [AdminController::class, 'us
 Route::middleware('auth')->get('/admin_settings', [AdminController::class, 'settings']);
 Route::middleware('auth')->get('/payments_management', [AdminController::class, 'payments']);
 Route::middleware('auth')->get('/payout', [PaymentsController::class, 'payout']);
+Route::middleware('auth')->get('/my_payments', [PaymentsController::class, 'myPaymentsPage']);
 Route::get('/payout_non_user', [PaymentsController::class, 'payout_non_user']);
 Route::get('/signin', [AuthController::class, 'loginPage'])->name('auth.loginPage');
 Route::get('/404_error', [AuthController::class, 'notFoundPage'])->name('route.404error');
@@ -27,7 +28,7 @@ Route::get('/confirmPaymentPage/{order_no}', [PaymentsController::class, 'confir
 Route::get('/signout', [AuthController::class, 'signout'])->name('api.auth.signout');
 Route::get('/download', [MarketingsController::class, 'download'])->name('marketings.download');
 Route::post('/payment_hook', [PaymentsController::class, 'payment_hook'])->name('payments.payment_hook');
-Route::middleware('auth')->get('/paySuccess', [PaymentsController::class, 'paySuccess'])->name('payments.paySuccess');
+Route::get('/paySuccess', [PaymentsController::class, 'paySuccess'])->name('payments.paySuccess');
 Route::middleware('auth')->get('/admin_download', [MarketingsController::class, 'admin_download'])->name('marketings.admin_download');
 Route::middleware('auth')->get('/users/download', [AdminController::class, 'users_download'])->name('admin.users.download');
 

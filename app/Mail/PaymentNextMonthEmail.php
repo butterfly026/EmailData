@@ -6,11 +6,11 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class PaymentVerifyEmail extends Mailable
+class PaymentNextMonthEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public string $order_no;
+    public string $expired_at;
     public string $name;
     public float $amount;
 
@@ -19,9 +19,9 @@ class PaymentVerifyEmail extends Mailable
      *
      * @return void
      */
-    public function __construct(string $order_no, float $amount, string $email)
+    public function __construct(string $expired_at, float $amount, string $email)
     {
-        $this->order_no = $order_no;
+        $this->expired_at = $expired_at;
         $this->name = substr($email, 0, strrpos($email, '@'));
         $this->amount = $amount;
     }
@@ -31,6 +31,6 @@ class PaymentVerifyEmail extends Mailable
      */
     public function build(): mixed
     {
-        return $this->subject('Payment for Full Access')->view('emails.customer.paymentVerify');
+        return $this->subject('Payment for Next Month')->view('emails.customer.paymentNextMonth');
     }
 }

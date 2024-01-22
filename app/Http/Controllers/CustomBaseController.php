@@ -99,8 +99,8 @@ class CustomBaseController extends Controller
                     $ipLog->save();
                 }
             } else if($user->is_paid == 1 && $user->last_paid_at) {
-                $lastPaidAt = Carbon::parse($user->last_paid_at);
-                if($lastPaidAt->addMonth() < now()) {
+                $expiredAt = Carbon::parse($user->expired_at);
+                if($expiredAt < now()) {
                     $user->is_paid = 0;
                     $user->save();
                     if($ipLog->try_num >= $max_free_num) {

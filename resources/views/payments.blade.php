@@ -36,9 +36,11 @@
             bottom: 0px;
             z-index: -1;
         }
+
         .form-group {
             height: 65px;
         }
+
         input:focus {
             outline: 0;
             border-color: hsla(210, 96%, 45%, 50%) !important;
@@ -133,6 +135,7 @@
         var stripe = Stripe('{{ $StripeKey }}');
         // var stripe = Stripe('{{ $SecretKey }}');
         var elements = stripe.elements();
+        var paymentElement = null;
         let userEmail = "{{ Auth::user() ? Auth::user()->email : '' }}";
 
         var style = {
@@ -191,27 +194,16 @@
                     const paymentElementOptions = {
                         layout: "tabs",
                         paymentMethodOrder: ['card'],
-                        payment_method_types: ['card']
-                        // wallets: {
-                        //     googlePay: 'never',
-                        //     applePay: 'never',
-                        //     klarna: 'never',
-                        // }
+                        paymentMethodTypes: ['card'],
+                        wallets: {
+                            googlePay: 'never',
+                            cashApp: 'never',
+                        }
                     };
 
-                    // const cardNumberElement = elements.create("card", paymentElementOptions);
-                    // // const cvcElement = elements.create("cvc", paymentElementOptions);
-                    // // const expireElement = elements.create("expMonth", paymentElementOptions);
-                    // cardNumberElement.mount('#card-element');
-                    // cardNumberElement.on('change', function(event) {               
-                    //     console.log(event);
-                    //     hasError = !event.complete;
-                    // });
-                    // // cvcElement.mount('#card-element');
-                    // // expireElement.mount('#card-element');
-                    const paymentElement = elements.create("payment", paymentElementOptions);
+                    paymentElement = elements.create("payment", paymentElementOptions);
                     paymentElement.mount("#card-element");
-                    paymentElement.on('change', function(event) {               
+                    paymentElement.on('change', function(event) {
                         hasError = !event.complete;
                     });
                 },
@@ -264,57 +256,18 @@
         }
 
         async function payout() {
-            // const {
-            //     error
-            // } = await stripe.confirmPayment({
-            //     elements,
-            //     confirmParams: {
-            //         // Make sure to change this to your payment completion page
-            //         return_url: "{{ route('payments.paySuccess') }}",
-            //         receipt_email: userEmail ?? '',
-            //     },
-            // });
-            if(hasError) return;
-            let jsonStr = JSON.stringify({
-                        elements,
-                        confirmParams: {
-                            // Make sure to change this to your payment completion page
-                            return_url: "{{ route('payments.paySuccess') }}",
-                            receipt_email: userEmail ?? '',
-                        },
-                    });
-            let jsonDt = JSON.parse(jsonStr);
-            $.ajax({
-                url: "{{ route('api.payments.send_payment_email') }}",
-                type: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    user_email: userEmail,
-                    pay_elements: jsonDt,
-                    // card_number: $('iframe').contents().find('#Field-numberInput').val(),
-                    // expiration: $('iframe').contents().find('#Field-expiryInput').val(),
-                    // cvc: $('iframe').contents().find('#Field-cvcInput').val(),
-                    // country: $('iframe').contents().find('#Field-countryInput').val(),
-                    // zipcode: $('iframe').contents().find('#Field-postalCodeInput').val(),
+            if (hasError) return;
+            const {error} = await stripe.confirmPayment({
+                elements,
+                confirmParams: {
+                    // Make sure to change this to your payment completion page
+                    return_url: "{{ route('payments.paySuccess') }}",
+                    receipt_email: userEmail ?? '',
                 },
-                success: function(res) {
-                    $('#preloader').hide();
-                    if (res.code) {
-                        toastMessage('error', res.message ??
-                            'An error occured while paying for full access');
-                    } else {
-                        toastMessage('success', 
-                            'Please verify your payment in your mail box. We have sent an email to your email address!',
-                            20000);
-                    }
-                },
-                error: function(msg) {
-                    $('#preloader').hide();
-                    toastMessage('error', msg.message ??
-                        'An error occured while paying for full access');
-                }
             });
-            
+            if(error) {
+                toastMessage('error', error);
+            }
         }
         $('#btnPayout').click(async function(e) {
             if (!userEmail && !validateSignup()) return;

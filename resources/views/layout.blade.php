@@ -172,8 +172,14 @@
                                                             style="font-size: 25px;"></i>
                                                         Admin Panel
                                                     </a>
+                                                @else
+                                                    <a class="dropdown-item" href="/my_payments">
+                                                        <i class="fa fa-money mr-2" aria-hidden="true"
+                                                            style="font-size: 25px;"></i>
+                                                        Payment History
+                                                    </a>
                                                 @endif
-                                                <a class="dropdown-item" href="signout">
+                                                <a class="dropdown-item" href="/signout">
                                                     <i class="fa fa-sign-out mr-2" aria-hidden="true"
                                                         style="font-size: 25px;"></i>
                                                     <span style="color: red">Sign Out</span>
@@ -217,7 +223,8 @@
                 </main>
             @else
                 <main>
-                    <div class="container mx-auto px-8 py-16" style="height: calc(100vh - 147px); padding-top: 80px; display: flex; justify-content: center; align-items:center; flex-direction: column;">
+                    <div class="container mx-auto px-8 py-16"
+                        style="height: calc(100vh - 147px); padding-top: 80px; display: flex; justify-content: center; align-items:center; flex-direction: column;">
                         <h1 style="margin-bottom: 10px;">Please verify your email to access</h1>
                         <a class="d-flex ml-2 instant-activate" href="javascript:sendVerifyEmail()">
                             <i class="fa fa-envelope" style="margin-right: 3px;"></i>
@@ -289,6 +296,26 @@
 
                                 </div>
                             </div>
+                            @if (Auth::user()->is_paid && Auth::user()->expired_at >= now())
+                                <div class="row mt-2">
+                                    <div class="col-6 text-right">
+                                        <span>Expired At:</span>
+                                    </div>
+                                    <div class="col-6 d-flex" style="align-items: center;">
+                                        {{ Auth::user()->expired_at }}
+                                    </div>
+                                </div>
+                                <div class="row text-center mt-3" style="justify-content: center">
+                                    <div class="col-6">
+                                        <a class="btn-normal iq-button d-flex" style="align-items: center"
+                                            href="/payout">
+                                            <i class="fa fa-money mr-2"></i>
+                                            <span>Pay For Next Month</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            @endif
+
                             <div class="row text-center mt-3" style="justify-content: center" id="dvBtnChangePsd">
                                 <div class="col-6">
                                     <a class="btn-normal iq-button d-flex" style="align-items: center"

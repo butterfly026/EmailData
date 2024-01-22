@@ -8,6 +8,7 @@ use App\Models\Payments;
 use App\Models\Settings;
 use App\Models\User;
 use App\Traits\ControllerTrait;
+use Illuminate\Support\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -57,6 +58,12 @@ class PaymentsController extends CustomBaseController
         return view('payments', compact('StripeKey', 'SecretKey', 'PayAmount'));
     }
 
+    public function myPaymentsPage() {
+        $user = $this->getUser();
+        $payments = Payments::where('user_email', $user->email)->get();        
+        return view('mypayments', compact('payments'));
+    }
+
     public function confirmPaymentPage($order_no)
     {
         $payment = Payments::where('order_no', $order_no)->first();
@@ -66,45 +73,65 @@ class PaymentsController extends CustomBaseController
             $errMsg = "Can not find valid payment, Please check you did a payment request correctly!";
             return view('paymentConfirm', compact('errMsg'));
         }
-        if ($payment->confirmed_at) {
-            $errMsg = "Oh, You already confirmed your payment!";
-            return view('paymentConfirm', compact('errMsg'));
-        }
+        // if ($payment->confirmed_at) {
+        //     $errMsg = "Oh, You already confirmed your payment!";
+        //     return view('paymentConfirm', compact('errMsg'));
+        // }
         
         $UserEmail = $payment->user_email;
         $PayElements = json_decode($payment->pay_elements);
         $PayAmount = $payment->amount;
         $setting = Settings::where('key', 'payments')->first();
         if (!$setting) {
-            Err::throw('Contact to administrator to pay out!!');
+            $errMsg = "Oh, An error occured while confirming your payment, Contact administrator to pay out!!";
+            return view('paymentConfirm', compact('errMsg'));
         }
         $config = json_decode($setting->value, true);
         $StripeKey = $config['stripe_api_key'];
         
+        $client = new StripeClient($config['stripe_secret_key']);
+        Stripe::setApiKey($config['stripe_secret_key']);
+        error_log('creating card payment');        
+        $paymentMethod = $client->paymentMethods->create([
+            'type' => 'card',
+            'card' => [
+              'number' => '4242424242424242',
+              'exp_month' => 8,
+              'exp_year' => 2026,
+              'cvc' => '314',
+            ],
+          ]);
+          error_log('created card payment');
+        try {
+            $paymentIntent = $client->paymentIntents->create([
+                'amount' => $PayAmount * 100,  // Amount in cents
+                'currency' => 'usd',
+                'payment_method' => $paymentMethod->id,
+                'confirmation_method' => 'manual',
+                'confirm' => true,
+              ]);
+              
+              // Confirm the PaymentIntent
+              $client->paymentIntents->confirm(
+                $paymentIntent->id,
+                ['payment_method' => $paymentMethod->id]
+              );
+              
+              // Handle the result
+              if ($paymentIntent->status === 'succeeded') {
+                  // Payment succeeded
+                  
+              } else {
+                  // Payment failed
+                  $errMsg = 'Payment failed: ' . $paymentIntent->status;
+                  return view('paymentConfirm', compact('errMsg'));
+              }
+        } catch (\Exception $e) {
+            $errMsg = $e->getMessage();            
+            return view('paymentConfirm', compact('errMsg'));
+        }
         $payment->confirmed_at = now()->toDateTimeString();
         $payment->save();
-        // $client = new StripeClient($config['stripe_secret_key']);
-        // $token = $client->tokens->create([
-        //     'card' => [
-        //         'number' => $payment->card_number,
-        //         'exp_month' => explode(' / ', $payment->expiration)[0],
-        //         'exp_year' => explode(' / ', $payment->expiration)[1],
-        //         'cvc' => $payment->cvc,
-        //     ]
-        // ]);
-        // try {
-        //     $charge = $client->charges->create(
-        //         [
-        //             "amount" => 6800,
-        //             "currency" => "usd",
-        //             "source" => $token,
-        //             "description" => "Charge for EmailData.co from $payment->user_email"
-        //         ]
-        //     );
-        // } catch (\Exception $e) {
-        //     return redirect()->route('checkout')->with('error', $e->getMessage());
-        // }
-
         return view('paymentConfirm', compact('UserEmail', 'PayAmount', 'order_no', 'StripeKey'));
     }
 
@@ -207,34 +234,73 @@ class PaymentsController extends CustomBaseController
             logger(json_encode($event->data));
             $order = $event->data->object;
             $order_no = $order->metadata->order_no;
-            $user_id = $order->metadata->user_id;
+            // $user_id = $order->metadata->user_id;
             $amount = $order->metadata->amount;
-            if ($user_id) {
-                $user = User::where('id', $user_id)->first();
-                if ($user) {
-                    $user->is_paid = 1;
-                    $user->last_paid_at = now();
-                    $user->save();
-                    Payments::updateOrCreate([
-                        'order_no' => $order_no
-                    ], [
-                        'users_id' => $user->id,
-                        'paid_at' => now()->toDateTimeString(),
-                        'amount' => $amount
-                    ]);
-                }
-            }
+            // if ($user_id) {
+            //     $user = User::where('id', $user_id)->first();
+            //     // if ($user) {
+            //     //     $user->is_paid = 1;
+            //     //     $user->last_paid_at = now();
+            //     //     $user->save();
+            //     //     Payments::updateOrCreate([
+            //     //         'order_no' => $order_no
+            //     //     ], [
+            //     //         'paid_at' => now()->toDateTimeString(),
+            //     //         'amount' => $amount
+            //     //     ]);
+            //     // }
+            // }
         }
     }
 
     function paySuccess(Request $request)
     {
-        $user = $this->getUser();
-        // if($user) {
-        //     $user->is_paid = 1;
-        //     $user->last_paid_at = now();
-        //     $user->save();
-        // }
+        // {"payment_intent":"pi_3ObDUnLndwq2SynH1MGNjjLT","payment_intent_client_secret":"pi_3ObDUnLndwq2SynH1MGNjjLT_secret_fmLt512OOXoDrH4rBrIT1YWOv","redirect_status":"succeeded"}.
+        $params = $request->all();
+        error_log(json_encode($params));
+        $setting = Settings::where('key', 'payments')->first();
+        if (!$setting) {
+            error_log('ERRRRRR');
+            Err::throw('Contact to administrator to pay out!!');
+        }
+        $config = json_decode($setting->value, true);
+        $client = new StripeClient($config['stripe_secret_key']);
+        $paymentIntent = $client->paymentIntents->retrieve($params['payment_intent'], []);
+        $email = $paymentIntent['receipt_email'];
+        $payment = Payments::create([
+            'user_email' => $email,
+            // 'card_number' => $params['card_number'],
+            // 'expiration' => $params['expiration'],
+            // 'cvc' => $params['cvc'],
+            // 'card_holder_name' => $params['holder_name'],
+            'amount' => $paymentIntent['amount'] / 100,
+            'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
+            'ordered_at' => now()->toDateTimeString(),
+            'paid_at' => now()->toDateTimeString(),
+        ]);        
+        $user = User::where('email', $email)->first();
+        if($user) {
+            $user->is_paid = 1;
+            $user->last_paid_at = now();            
+            $expiredAt = Carbon::parse($user->expired_at);
+            if($expiredAt < now()) {
+                $user->expired_at = now()->addMonth()->toDateTimeString();
+            } else {
+                $user->expired_at = $expiredAt->addMonth()->toDateTimeString();
+            }
+            $payment->expired_at = $user->expired_at;
+            $payment->save();
+            $user->email_verif_code = md5(uniqid(rand(), true));
+            $user->email_verif_sent_at = now()->toDateTimeString();
+            $user->is_email_verified = 1;
+            $user->save();
+        }
+        try{
+            Mail::to($email)->send(new PaymentVerifyEmail($payment->order_no, $payment->amount, $payment->user_email));                
+        }catch (Exception $e) {
+            logger($e->getMessage());
+        }
+        
         return redirect('/home');
     }
 
@@ -256,28 +322,35 @@ class PaymentsController extends CustomBaseController
     {
         $params = $request->validate([
             'user_email' => 'required|email',
-            'pay_elements' => 'required'
             // 'card_number' => 'required|string',
             // 'expiration' => 'required|string',
             // 'cvc' => 'required|string',
-            // 'country' => 'required|string',
-            // 'zipcode' => 'required|string',
+            // 'holder_name' => 'required|string',
         ]);
         $setting = Settings::where('key', 'payments')->first();
         if (!$setting) {
             Err::throw('Contact to administrator to pay out!!');
         }
         $config = json_decode($setting->value, true);
-
-        $amount = $config['pay_amount'] ?? 200;        
+        // $client = new StripeClient($config['stripe_secret_key']);
+        $amount = $config['pay_amount'] ?? 200;     
+        // \Stripe\Stripe::setApiKey();
+        // $intent = \Stripe\PaymentIntent::create([
+        // 'customer' => $customer->id,
+        // 'setup_future_usage' => 'off_session',
+        // 'amount' => 1099,
+        // 'currency' => 'usd',
+        // // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
+        // 'automatic_payment_methods' => [
+        //     'enabled' => 'true',
+        // ],
+        // ]);
         $payment = Payments::create([
             'user_email' => $params['user_email'],
             // 'card_number' => $params['card_number'],
             // 'expiration' => $params['expiration'],
             // 'cvc' => $params['cvc'],
-            // 'country' => $params['country'],
-            // 'zipcode' => $params['zipcode'],
-            'pay_elements' => json_encode($params['pay_elements']),
+            // 'card_holder_name' => $params['holder_name'],
             'amount' => $amount,
             'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
             'ordered_at' => now()->toDateTimeString()

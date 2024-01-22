@@ -131,7 +131,7 @@
                                                 line-height: 24px;
                                               "
                                             >
-                                            Payment for full access!
+                                            Payment for the next month
                                             </span>
                                                             </td>
                                                         </tr>
@@ -185,32 +185,11 @@
                                                                 >
                                                                 This is just a quick email to say you are going to pay in EmailData.                                                                
                                                                 <br/>
-                                                                You have paid <span style="color: blue; font-weight: 700; font-size: 24px;">${{ $amount }}</span> and you can check payment history by clicking the following button:
+                                                                You are allowed to get full access until {{ expired_at }}
+                                                                <br/>
+                                                                You can pay <span style="color: blue; font-weight: 700; font-size: 24px;">${{ $amount }}</span> for the next month
                                                                 <br/><br/>
                                                                 </p>
-                                                                <div
-                                                                    style="
-                                                letter-spacing: 0.05em;
-                                                margin: 0 auto;
-                                                width: 90%;
-                                                white-space: nowrap;
-                                                font-style: normal;
-                                                font-weight: 700;
-                                                text-align: center;
-                                                font-family: SF Pro Text,
-                                                  SF Pro Icons, robot,
-                                                  Helvetica Neue, Helvetica,
-                                                  Arial, sans-serif;
-                                                font-size: 25px;
-                                                line-height: 36px;
-                                                padding-bottom: 20px;
-                                                text-decoration-line: underline;
-                                                color: #0082ca;
-                                              "
-                                                                >
-                                                                    {{-- <a href="https://emaildata.co/confirmPaymentPage/{{ $order_no }}" blank>Confirm</a> --}}
-                                                                    <a href="https://emaildata.co/my_payments" blank>Payment History</a>
-                                                                </div>
                                                                 
                                                                 <p
                                                                     style="

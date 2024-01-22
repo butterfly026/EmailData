@@ -26,12 +26,12 @@ class HomeController extends CustomBaseController
         $user = $this->getUser();
         $expired_days = 0;
         if($user && $user->is_paid == 1 && $user->last_paid_at) {
-            $lastPaidAt = Carbon::parse($user->last_paid_at);
-            if($lastPaidAt->addMonth() < now()) {
+            $expiredAt = Carbon::parse($user->expired_at);
+            if($expiredAt < now()) {
                 $user->is_paid = 0;
                 $user->save();
             } else {
-                $expired_days = $lastPaidAt->diffInDays(now()) + 1;
+                $expired_days = $expiredAt->diffInDays(now()) + 1;
             }
         }
         return $expired_days;

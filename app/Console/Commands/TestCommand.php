@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Mail\EmailVerifyMail;
 use App\Mail\PaymentVerifyEmail;
+use App\Mail\PaymentNextMonthEmail;
 use App\Mail\SignupMail;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;

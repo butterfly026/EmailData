@@ -118,7 +118,11 @@ class AuthController extends CustomBaseController
         $user->password = bcrypt($params['password']);
         $user->save();
         logger("Sending email to $user->email with verification code $user->email_verif_code");
-        Mail::to($user->email)->send(new SignupMail($user->email_verif_code));
+        try{
+            Mail::to($user->email)->send(new SignupMail($user->email_verif_code));
+        }catch (Exception $e) {
+            logger($e->getMessage());
+        }
         // if (!Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
         //     RateLimiter::hit($this->throttleKey($request));
 
