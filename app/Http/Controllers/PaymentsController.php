@@ -424,6 +424,11 @@ class PaymentsController extends CustomBaseController
             'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
             'ordered_at' => now()->toDateTimeString(),
         ]);
+        try {
+            Mail::to($user->email)->send(new PaymentVerifyEmail($payment->order_no, $payment->amount, $payment->user_email));
+        } catch (Exception $e) {
+            logger($e->getMessage());
+        }
         return [
             'order_no' => $payment->order_no
         ];
