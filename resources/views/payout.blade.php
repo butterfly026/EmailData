@@ -303,7 +303,7 @@
                             toastMessage('error', res.message ??
                                 'An error occured while signing up new user');
                         } else {
-                            toastMessage('success', 'We have sent payment email to you, please confirm your payment with order number(' + res.data.order_no + ')!');
+                            toastMessage('success', 'We have sent payment email to you, please confirm your payment with order number(' + res.order_no + ')!', 10000);
                         }
                     },
                     error: function(msg) {
