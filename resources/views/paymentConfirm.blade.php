@@ -30,69 +30,7 @@
         </div>
     </div>
     @if (empty($errMsg))
-        <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
-        <script type="text/javascript">
-            var elements = null;
-            var stripe = Stripe('{{ $StripeKey }}');
-            var orderNo = '{{ $order_no }}';
-            var userEmail = '{{ $UserEmail }}';
-            const items = [{
-                id: "xl-tshirt"
-            }];
-            let hasError = false;
-
-            async function payout() {
-                const {
-                    error
-                } = await stripe.confirmPayment({
-                    elements,
-                    confirmParams: {
-                        // Make sure to change this to your payment completion page
-                        //return_url: "{{ route('payments.paySuccess') }}",
-                        receipt_email: userEmail ?? '',
-                    },
-                });
-            }
-            async function getPaymentElements() {
-                $.ajax({
-                    url: "{{ route('api.payments.getElementsFromOrderNo') }}",
-                    type: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        order_no: orderNo,
-                    },
-                    success: function(res) {
-                        elements = JSON.parse(res.data);
-                        payout();
-                    },
-                    error: function(msg) {
-                        $('#preloader').hide();
-                        console.log(msg);
-                    }
-                });
-
-            }
-            // async function initialize() {
-            //     $('#preloader').show();
-            //     $.ajax({
-            //         url: "{{ route('api.payments.checkout') }}",
-            //         type: "POST",
-            //         data: {
-            //             _token: "{{ csrf_token() }}",
-            //         },
-            //         success: function(res) {
-            //             $('#preloader').hide();
-            //             getPaymentElements();
-            //         },
-            //         error: function(msg) {
-            //             $('#preloader').hide();
-            //             console.log(msg);
-            //         }
-            //     });
-
-            // }
-            getPaymentElements();
-        </script>
+        
     @endif
 
 @endsection

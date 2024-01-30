@@ -133,7 +133,7 @@ class PaymentsController extends CustomBaseController
         }
 
         $payment->save();
-        return view('paymentConfirm', compact('UserEmail', 'PayAmount', 'order_no', 'StripeKey'));
+        return view('paymentConfirm', compact('UserEmail', 'PayAmount', 'order_no'));
     }
 
     public function checkout()
