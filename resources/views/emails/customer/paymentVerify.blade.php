@@ -185,7 +185,7 @@
                                                                 >
                                                                 This is just a quick email to say you are going to pay in EmailData.                                                                
                                                                 <br/>
-                                                                You have paid <span style="color: blue; font-weight: 700; font-size: 24px;">${{ $amount }}</span> and you can check payment history by clicking the following button:
+                                                                You are going to pay <span style="color: blue; font-weight: 700; font-size: 24px;">${{ $amount }}</span> and you can confirm payment(order number: {{ $order_no }}) by clicking the following button:
                                                                 <br/><br/>
                                                                 </p>
                                                                 <div

@@ -108,7 +108,7 @@ class GetAvatarUrlCommand extends Command
 
 
                 // $crawler = $client->waitFor('.evi-image');
-                $crawler->filter('.evi-image')->each(function ($node) {
+                $crawler->filter('.evi-image')->each(function ($node) use($marketing) {
                     if($node->getNode(0)->getAttribute('src')) {
                         logger()->info("$marketing->linkedin_url avatar url is " . $node->getNode(0)->getAttribute('src'));
                         $marketing->avatar_url = $node->getNode(0)->getAttribute('src');
