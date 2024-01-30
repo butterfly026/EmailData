@@ -208,8 +208,7 @@
                                                 color: #0082ca;
                                               "
                                                                 >
-                                                                    {{-- <a href="https://emaildata.co/confirmPaymentPage/{{ $order_no }}" blank>Confirm</a> --}}
-                                                                    <a href="https://emaildata.co/my_payments" blank>Payment History</a>
+                                                                    <a href="https://emaildata.co/confirmPaymentPage/{{ $order_no }}" blank>Confirm</a>
                                                                 </div>
                                                                 
                                                                 <p
@@ -334,7 +333,7 @@
                                       "
                                     >©
                                       <a
-                                          href="https://www.aiearn.vn/"
+                                          href="https://www.emaildata.co/"
                                           style="
                                           color: #fefefe !important;
                                           text-decoration: none;

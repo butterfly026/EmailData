@@ -35,6 +35,7 @@ Route::middleware('auth')->post('/marketings/search', [MarketingsController::cla
 Route::middleware('auth')->post('/marketings/admin_search', [MarketingsController::class, 'admin_search'])->name('api.marketings.admin_search');
 Route::middleware('auth')->post('/users/users_search', [UsersController::class, 'users_search'])->name('api.users.users_search');
 Route::middleware('auth')->post('/payments/payments_search', [PaymentsController::class, 'payments_search'])->name('api.payments.payments_search');
+Route::middleware('auth')->post('/confirm_payout', [PaymentsController::class, 'confirm_payout'])->name('api.payments.confirm_payout');
 Route::middleware('auth')->post('/admin/saveSetting', [AdminController::class, 'saveSetting'])->name('api.admin.saveSetting');
 Route::middleware('auth')->post('/admin/getSetting', [AdminController::class, 'getSetting'])->name('api.admin.getSetting');
 Route::middleware('auth')->post('/admin/users/delete', [UsersController::class, 'delete'])->name('api.admin.users.delete');

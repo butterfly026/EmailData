@@ -131,7 +131,7 @@
                                                 line-height: 24px;
                                               "
                                             >
-                                            Payment for the next month
+                                            Payment for full access!
                                             </span>
                                                             </td>
                                                         </tr>
@@ -183,13 +183,12 @@
                                                 color: #000000;
                                               "
                                                                 >
-                                                                This is just a quick email to say you are going to pay in EmailData.                                                                
+                                                                This is just a quick email about payment in EmailData.
                                                                 <br/>
-                                                                You are allowed to get full access until {{ expired_at }}
-                                                                <br/>
-                                                                You can pay <span style="color: blue; font-weight: 700; font-size: 24px;">${{ $amount }}</span> for the next month
+                                                                You have paid <span style="color: blue; font-weight: 700; font-size: 24px;">${{ $amount }}</span> and you can access full leads data.
                                                                 <br/><br/>
                                                                 </p>
+                                                               
                                                                 
                                                                 <p
                                                                     style="

@@ -369,7 +369,7 @@
                                       "
                                     >©
                                       <a
-                                          href="https://www.aiearn.vn/"
+                                          href="https://www.emaildata.co/"
                                           style="
                                           color: #fefefe !important;
                                           text-decoration: none;

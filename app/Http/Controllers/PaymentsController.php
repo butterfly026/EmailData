@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\Err;
 use App\Mail\PaymentVerifyEmail;
+use App\Mail\PaymentSuccessEmail;
 use App\Models\Payments;
 use App\Models\Settings;
 use App\Models\User;
@@ -14,6 +15,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Stripe\Stripe;
 use Stripe\StripeClient;
+use Stripe\Customer;
+use Stripe\Charge;
 
 class PaymentsController extends CustomBaseController
 {
@@ -58,9 +61,10 @@ class PaymentsController extends CustomBaseController
         return view('payout', compact('StripeKey', 'SecretKey', 'PayAmount'));
     }
 
-    public function myPaymentsPage() {
+    public function myPaymentsPage()
+    {
         $user = $this->getUser();
-        $payments = Payments::where('user_email', $user->email)->get();        
+        $payments = Payments::where('user_email', $user->email)->get();
         return view('mypayments', compact('payments'));
     }
 
@@ -73,70 +77,85 @@ class PaymentsController extends CustomBaseController
             $errMsg = "Can not find valid payment, Please check you did a payment request correctly!";
             return view('paymentConfirm', compact('errMsg'));
         }
-        // if ($payment->confirmed_at) {
-        //     $errMsg = "Oh, You already confirmed your payment!";
-        //     return view('paymentConfirm', compact('errMsg'));
-        // }
-        
+
         $UserEmail = $payment->user_email;
         $PayElements = json_decode($payment->pay_elements);
         $PayAmount = $payment->amount;
+        $payment->confirmed_at = now()->toDateTimeString();
         $setting = Settings::where('key', 'payments')->first();
         if (!$setting) {
-            $errMsg = "Oh, An error occured while confirming your payment, Contact administrator to pay out!!";
-            return view('paymentConfirm', compact('errMsg'));
+            Err::throw('Contact to administrator to pay out!!');
         }
         $config = json_decode($setting->value, true);
-        $StripeKey = $config['stripe_api_key'];
-        
-        $client = new StripeClient($config['stripe_secret_key']);
         Stripe::setApiKey($config['stripe_secret_key']);
-        error_log('creating card payment');        
-        $paymentMethod = $client->paymentMethods->create([
-            'type' => 'card',
-            'card' => [
-              'number' => '4242424242424242',
-              'exp_month' => 8,
-              'exp_year' => 2026,
-              'cvc' => '314',
-            ],
-          ]);
-          error_log('created card payment');
-        try {
-            $paymentIntent = $client->paymentIntents->create([
-                'amount' => $PayAmount * 100,  // Amount in cents
-                'currency' => 'usd',
-                'payment_method' => $paymentMethod->id,
-                'confirmation_method' => 'manual',
-                'confirm' => true,
-              ]);
-              
-              // Confirm the PaymentIntent
-              $client->paymentIntents->confirm(
-                $paymentIntent->id,
-                ['payment_method' => $paymentMethod->id]
-              );
-              
-              // Handle the result
-              if ($paymentIntent->status === 'succeeded') {
-                  // Payment succeeded
-                  
-              } else {
-                  // Payment failed
-                  $errMsg = 'Payment failed: ' . $paymentIntent->status;
-                  return view('paymentConfirm', compact('errMsg'));
-              }
-        } catch (\Exception $e) {
-            $errMsg = $e->getMessage();            
+
+        $user = User::where('email', $UserEmail)->first();
+        if (empty($user) || !$user->stripe_customer_id) {
+            $errMsg = "Can not find valid user information, Please contact to administrator!";
             return view('paymentConfirm', compact('errMsg'));
         }
-        $payment->confirmed_at = now()->toDateTimeString();
+        $amount = $config['pay_amount'] ?? 200;
+
+        $charge = Charge::create([
+            'amount' => $amount * 100, // amount in cents
+            'currency' => 'usd',
+            'customer' => $user->stripe_customer_id,
+        ]);
+        if ($charge->status == 'succeeded') {            
+            if ($user) {
+                $user->is_paid = 1;
+                $user->last_paid_at = now();
+                $expiredAt = Carbon::parse($user->expired_at);
+                if ($expiredAt < now()) {
+                    $user->expired_at = now()->addMonth()->toDateTimeString();
+                } else {
+                    $user->expired_at = $expiredAt->addMonth()->toDateTimeString();
+                }
+                $payment->paid_at = now()->toDateTimeString();
+                $payment->expired_at = $user->expired_at;
+                $payment->confirmed_at = $user->expired_at;
+                $payment->save();
+                if (!$user->is_email_verified) {
+                    $user->email_verif_code = md5(uniqid(rand(), true));
+                    $user->email_verif_sent_at = now()->toDateTimeString();
+                    $user->is_email_verified = 1;
+                }
+                $user->save();
+            }
+            try {
+                Mail::to($user->email)->send(new PaymentSuccessEmail($payment->order_no, $payment->amount, $payment->user_email));
+            } catch (Exception $e) {
+                logger($e->getMessage());
+            }
+        } else {
+            logger(json_encode($charge));
+            logger('An error occurred while creating payment');
+        }
+
         $payment->save();
         return view('paymentConfirm', compact('UserEmail', 'PayAmount', 'order_no', 'StripeKey'));
     }
 
     public function checkout()
     {
+        // $setting = Settings::where('key', 'payments')->first();
+        // if (!$setting) {
+        //     Err::throw('Contact to administrator to pay out!!');
+        // }
+        // $config = json_decode($setting->value, true);
+        // $client = new StripeClient($config['stripe_secret_key']);
+        // $paymentIntent = $client->paymentIntents->create([
+        //     'amount' => $config['pay_amount'] * 100,
+        //     'currency' => 'usd',
+        //     // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
+        //     'automatic_payment_methods' => [
+        //         'enabled' => true,
+        //     ],
+        // ]);
+        // return [
+        //     'clientSecret' => $paymentIntent->client_secret,
+        // ];
+
         $setting = Settings::where('key', 'payments')->first();
         if (!$setting) {
             Err::throw('Contact to administrator to pay out!!');
@@ -147,8 +166,26 @@ class PaymentsController extends CustomBaseController
             'amount' => $config['pay_amount'] * 100,
             'currency' => 'usd',
             // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
-            'automatic_payment_methods' => [
-                'enabled' => true,
+            // 'automatic_payment_methods' => [
+            //     'enabled' => true,
+            // ],
+            'confirmation_method' => 'manual',
+            'confirm' => true,
+            'payment_method_options' => [
+                'card' => [
+                    'installments' => [
+                        'enabled' => true,
+                    ],
+                ],
+            ],
+            'metadata' => [
+                'integration_check' => 'accept_a_payment',
+            ],
+            'items' => [
+                [
+                    'price' => $config['stripe_product_id'],
+                    'quantity' => 1,
+                ],
             ],
         ]);
         return [
@@ -257,7 +294,6 @@ class PaymentsController extends CustomBaseController
     {
         // {"payment_intent":"pi_3ObDUnLndwq2SynH1MGNjjLT","payment_intent_client_secret":"pi_3ObDUnLndwq2SynH1MGNjjLT_secret_fmLt512OOXoDrH4rBrIT1YWOv","redirect_status":"succeeded"}.
         $params = $request->all();
-        error_log(json_encode($params));
         $setting = Settings::where('key', 'payments')->first();
         if (!$setting) {
             error_log('ERRRRRR');
@@ -277,13 +313,13 @@ class PaymentsController extends CustomBaseController
             'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
             'ordered_at' => now()->toDateTimeString(),
             'paid_at' => now()->toDateTimeString(),
-        ]);        
+        ]);
         $user = User::where('email', $email)->first();
-        if($user) {
+        if ($user) {
             $user->is_paid = 1;
-            $user->last_paid_at = now();            
+            $user->last_paid_at = now();
             $expiredAt = Carbon::parse($user->expired_at);
-            if($expiredAt < now()) {
+            if ($expiredAt < now()) {
                 $user->expired_at = now()->addMonth()->toDateTimeString();
             } else {
                 $user->expired_at = $expiredAt->addMonth()->toDateTimeString();
@@ -295,12 +331,12 @@ class PaymentsController extends CustomBaseController
             $user->is_email_verified = 1;
             $user->save();
         }
-        try{
-            Mail::to($email)->send(new PaymentVerifyEmail($payment->order_no, $payment->amount, $payment->user_email));                
-        }catch (Exception $e) {
+        try {
+            Mail::to($email)->send(new PaymentVerifyEmail($payment->order_no, $payment->amount, $payment->user_email));
+        } catch (Exception $e) {
             logger($e->getMessage());
         }
-        
+
         return redirect('/home');
     }
 
@@ -333,24 +369,9 @@ class PaymentsController extends CustomBaseController
         }
         $config = json_decode($setting->value, true);
         // $client = new StripeClient($config['stripe_secret_key']);
-        $amount = $config['pay_amount'] ?? 200;     
-        // \Stripe\Stripe::setApiKey();
-        // $intent = \Stripe\PaymentIntent::create([
-        // 'customer' => $customer->id,
-        // 'setup_future_usage' => 'off_session',
-        // 'amount' => 1099,
-        // 'currency' => 'usd',
-        // // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
-        // 'automatic_payment_methods' => [
-        //     'enabled' => 'true',
-        // ],
-        // ]);
+        $amount = $config['pay_amount'] ?? 200;
         $payment = Payments::create([
             'user_email' => $params['user_email'],
-            // 'card_number' => $params['card_number'],
-            // 'expiration' => $params['expiration'],
-            // 'cvc' => $params['cvc'],
-            // 'card_holder_name' => $params['holder_name'],
             'amount' => $amount,
             'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
             'ordered_at' => now()->toDateTimeString()
@@ -359,18 +380,52 @@ class PaymentsController extends CustomBaseController
         return 'success';
     }
 
-    function getElementsFromOrderNo(Request $request) {
+    function getElementsFromOrderNo(Request $request)
+    {
         $params = $request->validate([
             'order_no' => 'required|string'
         ]);
 
         $payment = Payments::where('order_no', $params['order_no'])->first();
-        if($payment) {
+        if ($payment) {
             return [
                 'data' => $payment->pay_elements
             ];
         } else {
             Err::throw('Can not find payment from order number!');
         }
+    }
+
+    function confirm_payout(Request $request)
+    {
+        $params = $request->validate([
+            'email' => 'required|email',
+            'token_id' => 'required|string'
+        ]);
+        $setting = Settings::where('key', 'payments')->first();
+        if (!$setting) {
+            Err::throw('Contact to administrator to pay out!!');
+        }
+        $config = json_decode($setting->value, true);
+        Stripe::setApiKey($config['stripe_secret_key']);
+        $user = $this->getUser();
+        if ($user && !$user->stripe_customer_id) {
+            $customer = Customer::create([
+                'email' => $params['email'],
+                'source' => $params['token_id'],
+            ]);
+            $user->stripe_customer_id = $customer->id;
+            $user->save();
+        }
+        $amount = $config['pay_amount'] ?? 200;
+        $payment = Payments::create([
+            'user_email' => $user->email,
+            'amount' => $amount,
+            'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
+            'ordered_at' => now()->toDateTimeString(),
+        ]);
+        return [
+            'order_no' => $payment->order_no
+        ];
     }
 }
