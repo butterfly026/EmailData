@@ -422,13 +422,46 @@ class PaymentsController extends CustomBaseController
             'user_email' => $user->email,
             'amount' => $amount,
             'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
-            'ordered_at' => now()->toDateTimeString(),
+            'ordered_at' => now()->toDateTimeString(),            
         ]);
-        try {
-            Mail::to($user->email)->send(new PaymentVerifyEmail($payment->order_no, $payment->amount, $payment->user_email));
-        } catch (Exception $e) {
-            logger($e->getMessage());
+
+        $payment->confirmed_at = now()->toDateTimeString();
+        $charge = Charge::create([
+            'amount' => $amount * 100, // amount in cents
+            'currency' => 'usd',
+            'customer' => $user->stripe_customer_id,
+        ]);
+        if ($charge->status == 'succeeded') {            
+            if ($user) {
+                $user->is_paid = 1;
+                $user->last_paid_at = now();
+                $expiredAt = Carbon::parse($user->expired_at);
+                if ($expiredAt < now()) {
+                    $user->expired_at = now()->addMonth()->toDateTimeString();
+                } else {
+                    $user->expired_at = $expiredAt->addMonth()->toDateTimeString();
+                }
+                $payment->paid_at = now()->toDateTimeString();
+                $payment->expired_at = $user->expired_at;
+                $payment->confirmed_at = $user->expired_at;
+                $payment->save();
+                if (!$user->is_email_verified) {
+                    $user->email_verif_code = md5(uniqid(rand(), true));
+                    $user->email_verif_sent_at = now()->toDateTimeString();
+                    $user->is_email_verified = 1;
+                }
+                $user->save();
+            }
+            try {
+                Mail::to($user->email)->send(new PaymentSuccessEmail($payment->order_no, $payment->amount, $payment->user_email));
+            } catch (Exception $e) {
+                logger($e->getMessage());
+            }
+        } else {
+            logger(json_encode($charge));
+            logger('An error occurred while creating payment');
         }
+
         return [
             'order_no' => $payment->order_no
         ];
