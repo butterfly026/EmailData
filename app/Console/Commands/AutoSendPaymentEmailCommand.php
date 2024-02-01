@@ -101,7 +101,7 @@ class AutoSendPaymentEmailCommand extends Command
                         logger('An error occurred while creating payment');
                     }
                 } else {
-                    Mail::to($user->email)->send(new PaymentNextMonthEmail($user->expired_at, $amount, $user->email));
+                    // Mail::to($user->email)->send(new PaymentNextMonthEmail($user->expired_at, $amount, $user->email));
                 }
             } catch (Exception $e) {
                 error_log($e->getMessage());
