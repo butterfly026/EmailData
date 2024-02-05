@@ -123,11 +123,11 @@ class AuthController extends CustomBaseController
         }catch (Exception $e) {
             logger($e->getMessage());
         }
-        // if (!Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
-        //     RateLimiter::hit($this->throttleKey($request));
+        if (!Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
+            RateLimiter::hit($this->throttleKey($request));
 
-        //     throw new Exception(__('auth.failed'));
-        // }
+            throw new Exception(__('auth.failed'));
+        }
         return [
             'user' => $user,
             'token' => ['access_token' => $user->createToken('customer', ['customer'])->plainTextToken],
