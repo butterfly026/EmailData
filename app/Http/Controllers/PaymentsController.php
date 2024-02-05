@@ -408,7 +408,10 @@ class PaymentsController extends CustomBaseController
         }
         $config = json_decode($setting->value, true);
         Stripe::setApiKey($config['stripe_secret_key']);
-        $user = $this->getUser();
+        $user = User::where('email', $params['email'])->first();
+        if (!$user) {
+            Err::throw('Email is not valid or not registered!!');
+        }
         if ($user && !$user->stripe_customer_id) {
             $customer = Customer::create([
                 'email' => $params['email'],
