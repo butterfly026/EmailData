@@ -24,6 +24,7 @@ Route::post('/marketings/list', [MarketingsController::class, 'list'])->name('ap
 Route::post('/marketings/topRates', [MarketingsController::class, 'topRates'])->name('api.marketings.topRates');
 Route::post('/marketings/free_search', [MarketingsController::class, 'free_search'])->name('api.marketings.free_search');
 Route::post('/payments/checkout', [PaymentsController::class, 'checkout'])->name('api.payments.checkout');
+Route::post('/confirm_payout', [PaymentsController::class, 'confirm_payout'])->name('api.payments.confirm_payout');
 Route::post('/payments/sendPaymentEmail', [PaymentsController::class, 'sendPaymentEmail'])->name('api.payments.send_payment_email');
 Route::post('/payments/getElementsFromOrderNo', [PaymentsController::class, 'getElementsFromOrderNo'])->name('api.payments.getElementsFromOrderNo');
 Route::post('/auth/signin', [AuthController::class, 'login'])->name('api.auth.login');
@@ -35,7 +36,6 @@ Route::middleware('auth')->post('/marketings/search', [MarketingsController::cla
 Route::middleware('auth')->post('/marketings/admin_search', [MarketingsController::class, 'admin_search'])->name('api.marketings.admin_search');
 Route::middleware('auth')->post('/users/users_search', [UsersController::class, 'users_search'])->name('api.users.users_search');
 Route::middleware('auth')->post('/payments/payments_search', [PaymentsController::class, 'payments_search'])->name('api.payments.payments_search');
-Route::middleware('auth')->post('/confirm_payout', [PaymentsController::class, 'confirm_payout'])->name('api.payments.confirm_payout');
 Route::middleware('auth')->post('/admin/saveSetting', [AdminController::class, 'saveSetting'])->name('api.admin.saveSetting');
 Route::middleware('auth')->post('/admin/getSetting', [AdminController::class, 'getSetting'])->name('api.admin.getSetting');
 Route::middleware('auth')->post('/admin/users/delete', [UsersController::class, 'delete'])->name('api.admin.users.delete');
