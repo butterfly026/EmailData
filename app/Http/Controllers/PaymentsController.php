@@ -460,6 +460,7 @@ class PaymentsController extends CustomBaseController
         } else {
             logger(json_encode($charge));
             logger('An error occurred while creating payment');
+            Err::Throw('An error occurred while creating payment');
         }
 
         return [

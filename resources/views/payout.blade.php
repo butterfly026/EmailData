@@ -305,7 +305,7 @@
                         } else {
                             toastMessage('success', 'Thank you for your payment, you can access full leads information.', 10000);
                             setTimeout(() => {
-                                window.location.href='/';
+                                window.location.href='/signin';
                             }, 4000);
                         }
                     },
