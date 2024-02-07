@@ -165,7 +165,7 @@
                                                 color: #000000;
                                               "
                                                                 >
-                                                                    Dear {{ $name }},
+                                                                    Hey {{ $name }},
                                                                 </p>
                                                                 <p
                                                                     style="
@@ -183,13 +183,11 @@
                                                 color: #000000;
                                               "
                                                                 >
-                                                                This is just a quick email about payment in EmailData.
-                                                                <br/>
-                                                                You have paid <span style="color: blue; font-weight: 700; font-size: 24px;">${{ $amount }}</span> and you can access full leads data.
+                                                                This is just a quick email to share that your payment of &nbsp;
+                                                                <span style="color: blue; font-weight: 700; font-size: 24px;">${{ $amount }}</span>&nbsp; went through so you now have full access.
+                                                                <br/>                                                                
                                                                 <br/><br/>
                                                                 </p>
-                                                               
-                                                                
                                                                 <p
                                                                     style="
                                                 margin: 0 auto;
@@ -209,7 +207,11 @@
                                                                 
 
                                                                 <br/><br/>
+                                                                Thanks, 
+                                                                <br>
+                                                                Finance Department at Emaildata.co
                                                                 </p>
+                                                                
                                                                 <p
                                                                     style="
                                                 margin: 0 auto;

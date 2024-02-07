@@ -285,36 +285,38 @@
         async function payout() {
             if (hasError1 || hasError2 || hasError3) return;
             stripe.createToken(cardNumber).then((result) => {
-                if(result.error) {
+                if (result.error) {
                     toastMessage('error', result.error.mesage);
                     $('#preloader').hide();
                 } else {
                     $.ajax({
-                    url: "{{ route('api.payments.confirm_payout') }}",
-                    type: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        email: userEmail,
-                        token_id: result.token.id
-                    },
-                    success: function(res) {
-                        $('#preloader').hide();
-                        if (res.code) {
-                            toastMessage('error', res.message ??
+                        url: "{{ route('api.payments.confirm_payout') }}",
+                        type: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            email: userEmail,
+                            token_id: result.token.id
+                        },
+                        success: function(res) {
+                            $('#preloader').hide();
+                            if (res.code) {
+                                toastMessage('error', res.message ??
+                                    'An error occured while signing up new user');
+                            } else {
+                                toastMessage('success',
+                                    'Thank you for your payment! You will be redirected to your dashboard in the next few seconds',
+                                    10000);
+                                setTimeout(() => {
+                                    window.location.href = '/';
+                                }, 4000);
+                            }
+                        },
+                        error: function(msg) {
+                            $('#preloader').hide();
+                            toastMessage('error', msg.message ??
                                 'An error occured while signing up new user');
-                        } else {
-                            toastMessage('success', 'Thank you for your payment, you can access full leads information.', 10000);
-                            setTimeout(() => {
-                                window.location.href='/';
-                            }, 4000);
                         }
-                    },
-                    error: function(msg) {
-                        $('#preloader').hide();
-                        toastMessage('error', msg.message ??
-                            'An error occured while signing up new user');
-                    }
-                });
+                    });
                 }
             })
         }
@@ -331,7 +333,6 @@
                         password: $('#password').val()
                     },
                     success: function(res) {
-                        $('#preloader').hide();
                         if (res.code) {
                             toastMessage('error', res.message ??
                                 'An error occured while signing up new user');

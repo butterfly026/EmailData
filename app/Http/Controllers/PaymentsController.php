@@ -116,7 +116,6 @@ class PaymentsController extends CustomBaseController
                 $payment->confirmed_at = $user->expired_at;
                 $payment->save();
                 if (!$user->is_email_verified) {
-                    $user->email_verif_code = md5(uniqid(rand(), true));
                     $user->email_verif_sent_at = now()->toDateTimeString();
                     $user->is_email_verified = 1;
                 }
@@ -326,7 +325,6 @@ class PaymentsController extends CustomBaseController
             }
             $payment->expired_at = $user->expired_at;
             $payment->save();
-            $user->email_verif_code = md5(uniqid(rand(), true));
             $user->email_verif_sent_at = now()->toDateTimeString();
             $user->is_email_verified = 1;
             $user->save();
@@ -449,7 +447,6 @@ class PaymentsController extends CustomBaseController
                 $payment->confirmed_at = $user->expired_at;
                 $payment->save();
                 if (!$user->is_email_verified) {
-                    $user->email_verif_code = md5(uniqid(rand(), true));
                     $user->email_verif_sent_at = now()->toDateTimeString();
                     $user->is_email_verified = 1;
                 }

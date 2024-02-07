@@ -31,6 +31,6 @@ class PaymentSuccessEmail extends Mailable
      */
     public function build(): mixed
     {
-        return $this->subject('Payment for Full Access')->view('emails.customer.paymentSuccess');
+        return $this->subject('You now have full access')->view('emails.customer.paymentSuccess');
     }
 }
