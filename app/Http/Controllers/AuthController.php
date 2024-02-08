@@ -119,7 +119,7 @@ class AuthController extends CustomBaseController
         $user->save();
         logger("Sending email to $user->email with verification code $user->email_verif_code");
         try{
-            Mail::to($user->email)->send(new SignupMail($user->email_verif_code));
+            Mail::to($user->email)->send(new SignupMail($user->email_verif_code, $user->email));
         }catch (Exception $e) {
             logger($e->getMessage());
         }
@@ -152,7 +152,7 @@ class AuthController extends CustomBaseController
         $user->email_verif_sent_at = now()->toDateTimeString();
         $user->save();
         try {
-            Mail::to($user->email)->send(new SignupMail($user->email_verif_code));
+            Mail::to($user->email)->send(new SignupMail($user->email_verif_code, $user->email));
         }catch(Exception $e) {
 
         }

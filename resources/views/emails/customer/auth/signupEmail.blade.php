@@ -165,7 +165,7 @@
                                                 color: #000000;
                                               "
                                                                 >
-                                                                    Dear user,
+                                                                    Dear {{ $name }},
                                                                 </p>
                                                                 <p
                                                                     style="
@@ -178,7 +178,7 @@
                                                   Helvetica Neue, Helvetica,
                                                   Arial, sans-serif;
                                                 font-size: 14px;
-                                                line-height: 20px;
+                                                line-height: 30px;
                                                 font-weight: normal;
                                                 color: #000000;
                                               "
