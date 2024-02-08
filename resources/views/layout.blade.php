@@ -299,13 +299,13 @@
                             @if (Auth::user()->is_paid && Auth::user()->expired_at >= now())
                                 <div class="row mt-2">
                                     <div class="col-6 text-right">
-                                        <span>Expired At:</span>
+                                        <span>Next Payment:</span>
                                     </div>
                                     <div class="col-6 d-flex" style="align-items: center;">
                                         {{ Auth::user()->expired_at }}
                                     </div>
                                 </div>
-                                <div class="row text-center mt-3" style="justify-content: center">
+                                {{-- <div class="row text-center mt-3" style="justify-content: center">
                                     <div class="col-6">
                                         <a class="btn-normal iq-button d-flex" style="align-items: center"
                                             href="/payout">
@@ -313,7 +313,7 @@
                                             <span>Pay For Next Month</span>
                                         </a>
                                     </div>
-                                </div>
+                                </div> --}}
                             @endif
 
                             <div class="row text-center mt-3" style="justify-content: center" id="dvBtnChangePsd">

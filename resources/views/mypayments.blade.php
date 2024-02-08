@@ -25,7 +25,7 @@
                                     <th style="width: 200px;">Email</th>
                                     <th style="width: 200px;">Amount</th>
                                     <th style="min-width: 200px;">Paid At</th>
-                                    <th style="min-width: 200px;">Expired At</th>
+                                    <th style="min-width: 200px;">Next Payment</th>
                                 </tr>
                             </thead>
                             <tbody id="tbodyResult">
