@@ -82,6 +82,32 @@
                 }).showToast();
             }
         </script>
+        <!-- Meta Pixel Code -->
+        <script>
+            ! function(f, b, e, v, n, t, s) {
+                if (f.fbq) return;
+                n = f.fbq = function() {
+                    n.callMethod ?
+                        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+                };
+                if (!f._fbq) f._fbq = n;
+                n.push = n;
+                n.loaded = !0;
+                n.version = '2.0';
+                n.queue = [];
+                t = b.createElement(e);
+                t.async = !0;
+                t.src = v;
+                s = b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t, s)
+            }(window, document, 'script',
+                'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '722563953413096');
+            fbq('track', 'PageView');
+        </script>
+        <noscript><img height="1" width="1" style="display:none"
+                src="https://www.facebook.com/tr?id=722563953413096&ev=PageView&noscript=1" /></noscript>
+        <!-- End Meta Pixel Code -->
     </head>
 
     <body class="h-full">
@@ -139,8 +165,7 @@
                                         @if (Auth::user())
                                             <li class="nav-item dropdown" style="display: flex; align-items: center;">
                                                 <a class=" nav-instant-access nav-link d-inline-block"
-                                                    style="padding: 5px 30px; font-size: 17px;"
-                                                    href="#">
+                                                    style="padding: 5px 30px; font-size: 17px;" href="#">
                                                     <span>
                                                         Management
                                                     </span>
@@ -365,8 +390,10 @@
                                     <div class="textwidget">
                                         <div class="row ">
                                             <div class="col-lg-6 col-md-12  mb-4 mb-lg-0">
-                                                <img class="img-fluid" src="images/logo_white.png" alt="img" style="height: 40px;">
-                                                <p class="mb-0 text-white" style="margin-left: 20px;">Your home to unlimited lead access.</p>
+                                                <img class="img-fluid" src="images/logo_white.png" alt="img"
+                                                    style="height: 40px;">
+                                                <p class="mb-0 text-white" style="margin-left: 20px;">Your home to
+                                                    unlimited lead access.</p>
                                             </div>
                                             {{-- <div class="col-lg-6 pl-lg-5 align-self-center text-right">
                                                 <a class="text-white" href="/privacy_policy" style="margin-right: 10px">Privacy Policy</a>

@@ -23,13 +23,40 @@
     <link rel="stylesheet" type="text/css" href="/css/toastify.min.css">
 
     <title>Login </title>
+    <!-- Meta Pixel Code -->
+    <script>
+        ! function(f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function() {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '722563953413096');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=722563953413096&ev=PageView&noscript=1" /></noscript>
+    <!-- End Meta Pixel Code -->
 </head>
 
 <body>
 
 
     <div class="d-lg-flex half">
-        <div class="bg order-1 order-md-2" style="background: #efdd83; display: flex; align-items: center; justify-content: center">
+        <div class="bg order-1 order-md-2"
+            style="background: #efdd83; display: flex; align-items: center; justify-content: center">
             <img src="images/login_back2.png" style="width: 95%; visibility:visible">
         </div>
         <div class="contents order-2 order-md-1">
@@ -39,7 +66,8 @@
                     <div class="col-md-7">
                         <h3> Login to
                             <a href='/' style="text-decoration: blink"> <strong
-                                style="font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;color: #f05c42">Email Data</strong> </a>
+                                    style="font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;color: #f05c42">Email
+                                    Data</strong> </a>
                         </h3>
 
                         <div>
@@ -107,7 +135,7 @@
                     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                 );
         };
-        const toastMessage = (type, msg, duration=3000) => {
+        const toastMessage = (type, msg, duration = 3000) => {
             Toastify({
                 text: msg,
                 duration: duration,
@@ -156,10 +184,10 @@
                     password: $('#password').val()
                 },
                 success: function(res) {
-                    if(res.code) {
+                    if (res.code) {
                         toastMessage('error', res.message ?? 'An error occured while logging in');
                     } else {
-                        if(res.user?.user_type == 0)
+                        if (res.user?.user_type == 0)
                             window.location.href = '/home';
                         else if (res.user?.user_type == 1)
                             window.location.href = '/admin_panel';
