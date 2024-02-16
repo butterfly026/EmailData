@@ -247,13 +247,15 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="btnModalDownload" onclick="download()">Download</button>
+                        <button type="button" class="btn btn-primary" id="btnModalDownload"
+                            onclick="download()">Download</button>
                         <button type="button" class="btn btn-download" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
     </main>
+    @include('contactus')
 
     <script>
         @auth
@@ -264,12 +266,14 @@
         let lastQuery = '';
         let curPage = 1;
         let totalCnt = 0;
+
         function openDownloadModal() {
             $('#btnModalDownload').html('Download');
             $('#btnModalDownload').attr('disabled', false);
             $('#downloadNum').val(totalCnt);
             $('#downloadModal').modal('show');
         }
+
         function download() {
             if (lastQuery) {
                 var downloadLimit = $('#downloadNum').val() ?? 5;
