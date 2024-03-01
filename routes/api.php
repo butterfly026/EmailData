@@ -26,6 +26,7 @@ Route::post('/marketings/free_search', [MarketingsController::class, 'free_searc
 Route::post('/payments/checkout', [PaymentsController::class, 'checkout'])->name('api.payments.checkout');
 Route::post('/confirm_payout', [PaymentsController::class, 'confirm_payout'])->name('api.payments.confirm_payout');
 Route::post('/payments/sendPaymentEmail', [PaymentsController::class, 'sendPaymentEmail'])->name('api.payments.send_payment_email');
+Route::post('/payments/cancelSubscription', [PaymentsController::class, 'cancelSubscription'])->name('api.payments.cancel_subscription');
 Route::post('/payments/getElementsFromOrderNo', [PaymentsController::class, 'getElementsFromOrderNo'])->name('api.payments.getElementsFromOrderNo');
 Route::post('/auth/signin', [AuthController::class, 'login'])->name('api.auth.login');
 Route::post('/auth/signup', [AuthController::class, 'signup'])->name('api.auth.signup');

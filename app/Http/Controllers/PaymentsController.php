@@ -65,7 +65,7 @@ class PaymentsController extends CustomBaseController
     {
         $user = $this->getUser();
         $payments = Payments::where('user_email', $user->email)->get();
-        return view('mypayments', compact('payments'));
+        return view('mypayments', compact('payments','user'));
     }
 
     public function confirmPaymentPage($order_no)
@@ -337,7 +337,14 @@ class PaymentsController extends CustomBaseController
 
         return redirect('/home');
     }
-
+    function cancelSubscription(Request $request){
+        $params = $request->all();
+        $email = $params["user_email"];
+        $user = User::where('email', $email)->first();
+        $user->is_paid = 0;
+        $user->save();
+        echo 'cancelled';
+    }
     function payments_search(Request $request): mixed
     {
         $user = $this->getUser();
