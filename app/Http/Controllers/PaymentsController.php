@@ -65,7 +65,7 @@ class PaymentsController extends CustomBaseController
     {
         $user = $this->getUser();
         $payments = Payments::where('user_email', $user->email)->get();
-        return view('mypayments', compact('payments','user'));
+        return view('mypayments', compact('payments'));
     }
 
     public function confirmPaymentPage($order_no)
