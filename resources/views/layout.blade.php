@@ -186,11 +186,16 @@
                                                 </span>
                                             </a>
                                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <a class="dropdown-item" href="javascript:void(0)"
+                                                {{-- <a class="dropdown-item" href="javascript:void(0)"
                                                     data-toggle="modal" data-target="#userInfoModal">
                                                     <i class="fa fa-info-circle mr-2" aria-hidden="true"
                                                         style="font-size: 25px;"></i>
                                                     Account Info
+                                                </a> --}}
+                                                <a class="dropdown-item" href="/user_info">
+                                                    <i class="fa fa-info-circle mr-2" aria-hidden="true"
+                                                        style="font-size: 25px;"></i>
+                                                        Account Info
                                                 </a>
                                                 @if (Auth::user()->user_type == 1)
                                                     <a class="dropdown-item" href="admin_panel">
@@ -199,11 +204,11 @@
                                                         Admin Panel
                                                     </a>
                                                 @else
-                                                    <a class="dropdown-item" href="/my_payments">
+                                                    {{-- <a class="dropdown-item" href="/my_payments">
                                                         <i class="fa fa-money mr-2" aria-hidden="true"
                                                             style="font-size: 25px;"></i>
                                                         Payment History
-                                                    </a>
+                                                    </a> --}}
                                                 @endif
                                                 <a class="dropdown-item" href="/signout">
                                                     <i class="fa fa-sign-out mr-2" aria-hidden="true"
