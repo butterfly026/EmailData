@@ -222,7 +222,7 @@
             >
               <div class="flex items-center justify-start gap-2">
                 <img
-                  src="assets/testimonial/avatar.svg"
+                  src="/assets/testimonial/avatar.svg"
                   alt="customer"
                   class="!w-[80px] rounded-full"
                 />
@@ -235,7 +235,7 @@
               </div>
               <div class="flex items-center justify-center gap-2 flex-1">
                 <img
-                  src="assets/testimonial/com1.svg"
+                  src="/assets/company_1.png"
                   alt="company logo"
                   class="!w-[45px]"
                 />
@@ -262,7 +262,7 @@
             >
               <div class="flex items-center justify-start gap-2">
                 <img
-                  src="assets/testimonial/avatar1.svg"
+                  src="/assets/testimonial/avatar1.svg"
                   alt="customer"
                   class="!w-[80px] rounded-full"
                 />
@@ -275,7 +275,7 @@
               </div>
               <div class="flex items-center justify-center gap-2 flex-1">
                 <img
-                  src="assets/testimonial/com2.svg"
+                  src="/assets/company_2.png"
                   alt="company logo"
                   class="!w-[45px]"
                 />
@@ -302,7 +302,7 @@
             >
               <div class="flex items-center justify-start gap-2">
                 <img
-                  src="assets/testimonial/avatar2.svg"
+                  src="/assets/testimonial/avatar2.svg"
                   alt="customer"
                   class="!w-[80px] rounded-full"
                 />
@@ -315,7 +315,7 @@
               </div>
               <div class="flex items-center justify-center gap-2 flex-1">
                 <img
-                  src="assets/testimonial/com3.svg"
+                  src="/assets/company_3.png"
                   alt="company logo"
                   class="!w-[45px]"
                 />
