@@ -18,7 +18,7 @@ class HomeController extends CustomBaseController
      */
     public function index()
     {
-        return view('home');
+        return view('index');
     }
 
     public function getExpiredDays(): int
