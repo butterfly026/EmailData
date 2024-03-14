@@ -24,27 +24,47 @@
 
       $(document).ready(function() {
         $(".owl-carousel").owlCarousel({
-          loop: true,
-          margin: 10,
+          items: jQuerycarousel.data("items"),
+          loop: jQuerycarousel.data("loop"),
+          margin: jQuerycarousel.data("margin"),
+          stagePadding: jQuerycarousel.data("padding"),
+          nav: jQuerycarousel.data("nav"),
+          dots: jQuerycarousel.data("dots"),
+          autoplay: jQuerycarousel.data("autoplay"),
+          autoplayTimeout: jQuerycarousel.data("autoplay-timeout"),
+          navText: ["<i class='fa fa-angle-left fa-2x'></i>", "<i class='fa fa-angle-right fa-2x'></i>"],
           responsiveClass: true,
           responsive: {
+            // breakpoint from 0 up
             0: {
-              items: 1,
+              items: jQuerycarousel.data("items-mobile-sm"),
               nav: false,
-              loop: true,
+              dots: true
             },
-            1280: {
-              items: 2,
+            // breakpoint from 480 up
+            480: {
+              items: jQuerycarousel.data("items-mobile"),
               nav: false,
-              loop: true,
+              dots: true
             },
-          },
+            // breakpoint from 786 up
+            768: {
+              items: jQuerycarousel.data("items-tab")
+            },
+            // breakpoint from 1023 up
+            1023: {
+              items: jQuerycarousel.data("items-laptop")
+            },
+            1199: {
+              items: jQuerycarousel.data("items")
+            }
+          }
         });
         $('#btnSubmit').click(() => {
           const email = $('#email').val();
           if (email)
             window.location.href = "/payout_non_user?email=" + email;
-          else 
+          else
             window.location.href = "/payout_non_user";
         })
 
@@ -181,7 +201,7 @@
         </section>
 
         <div class="pb-40 pt-10 px-10">
-          <div class="owl-carousel">
+          <div class="owl-carousel" data-dots="true" data-items="4" data-items-laptop="2" data-items-tab="2" data-items-mobile="1" data-items-mobile-sm="1" data-autoplay="true" data-loop="true" data-nav="false">
             <!-- First -->
             <div class="flex flex-col justify-center items-center px-10 py-8 bg-[#F8F8F8] rounded-2xl">
               <div class="flex items-center justify-between gap-2 w-full flex-wrap">
@@ -214,7 +234,7 @@
                   <div class="flex flex-col justify-center">
                     <h4 class="text-[25px] font-bold">Ryan</h4>
                     <p class="text-[20px] text-[#F15C42]">
-                    At Solar Recruiter
+                      At Solar Recruiter
                     </p>
                   </div>
                 </div>
@@ -227,7 +247,7 @@
               <div class="h-[1px] bg-zinc-300 w-full my-5"></div>
 
               <div class="w-full text-zinc-700">
-              I now get unlimited leads per month instead of having to pay per lead... so much value
+                I now get unlimited leads per month instead of having to pay per lead... so much value
               </div>
             </div>
             <!-- Third -->
@@ -238,7 +258,7 @@
                   <div class="flex flex-col justify-center">
                     <h4 class="text-[25px] font-bold">Blake</h4>
                     <p class="text-[20px] text-[#F15C42]">
-                    At Ecommerce Ventures
+                      At Ecommerce Ventures
                     </p>
                   </div>
                 </div>
@@ -251,7 +271,7 @@
               <div class="h-[1px] bg-zinc-300 w-full my-5"></div>
 
               <div class="w-full text-zinc-700">
-              Helps my sales team narrow in on the quality companies rather than the  low level ones
+                Helps my sales team narrow in on the quality companies rather than the low level ones
               </div>
             </div>
             <!-- Fouth -->
@@ -262,7 +282,7 @@
                   <div class="flex flex-col justify-center">
                     <h4 class="text-[25px] font-bold">Ivan</h4>
                     <p class="text-[20px] text-[#F15C42]">
-                    At Codezone
+                      At Codezone
                     </p>
                   </div>
                 </div>
@@ -275,7 +295,7 @@
               <div class="h-[1px] bg-zinc-300 w-full my-5"></div>
 
               <div class="w-full text-zinc-700">
-              Tell me another data /lead software where you get access & get to download all of the leads for one monthly cost without some gimmick of buying \"credits\" or something similar. Great product.
+                Tell me another data /lead software where you get access & get to download all of the leads for one monthly cost without some gimmick of buying \"credits\" or something similar. Great product.
               </div>
             </div>
           </div>
