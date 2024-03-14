@@ -23,43 +23,62 @@
       }
 
       $(document).ready(function() {
+        // $(".owl-carousel").owlCarousel({
+
+        //   items: $(this).data("items"),
+        //   loop: $(this).data("loop"),
+        //   margin: $(this).data("margin"),
+        //   stagePadding: $(this).data("padding"),
+        //   nav: $(this).data("nav"),
+        //   dots: $(this).data("dots"),
+        //   autoplay: $(this).data("autoplay"),
+        //   autoplayTimeout: $(this).data("autoplay-timeout"),
+        //   navText: ["<i class='fa fa-angle-left fa-2x'></i>", "<i class='fa fa-angle-right fa-2x'></i>"],
+        //   responsiveClass: true,
+        //   responsive: {
+        //     // breakpoint from 0 up
+        //     0: {
+        //       items: $(this).data("items-mobile-sm"),
+        //       nav: false,
+        //       dots: true
+        //     },
+        //     // breakpoint from 480 up
+        //     480: {
+        //       items: $(this).data("items-mobile"),
+        //       nav: false,
+        //       dots: true
+        //     },
+        //     // breakpoint from 786 up
+        //     768: {
+        //       items: $(this).data("items-tab")
+        //     },
+        //     // breakpoint from 1023 up
+        //     1023: {
+        //       items: $(this).data("items-laptop")
+        //     },
+        //     1199: {
+        //       items: $(this).data("items")
+        //     }
+        //   }
+        // });
         $(".owl-carousel").owlCarousel({
-          
-          items: $(this).data("items"),
-          loop: $(this).data("loop"),
-          margin: $(this).data("margin"),
-          stagePadding: $(this).data("padding"),
-          nav: $(this).data("nav"),
-          dots: $(this).data("dots"),
-          autoplay: $(this).data("autoplay"),
-          autoplayTimeout: $(this).data("autoplay-timeout"),
-          navText: ["<i class='fa fa-angle-left fa-2x'></i>", "<i class='fa fa-angle-right fa-2x'></i>"],
+          loop: true,
+          autoPlay: true,
+          margin: 10,
           responsiveClass: true,
+          autoplayTimeout: 3,
           responsive: {
-            // breakpoint from 0 up
             0: {
-              items: $(this).data("items-mobile-sm"),
+              items: 1,
               nav: false,
-              dots: true
+              loop: true,
             },
-            // breakpoint from 480 up
-            480: {
-              items: $(this).data("items-mobile"),
+            1280: {
+              items: 3,
               nav: false,
-              dots: true
+              loop: true,
             },
-            // breakpoint from 786 up
-            768: {
-              items: $(this).data("items-tab")
-            },
-            // breakpoint from 1023 up
-            1023: {
-              items: $(this).data("items-laptop")
-            },
-            1199: {
-              items: $(this).data("items")
-            }
-          }
+          },
         });
         $('#btnSubmit').click(() => {
           const email = $('#email').val();
@@ -202,9 +221,9 @@
         </section>
 
         <div class="pb-40 pt-10 px-10">
-          <div class="owl-carousel" data-dots="true" data-items="4" data-items-laptop="2" data-items-tab="2" data-items-mobile="1" data-items-mobile-sm="1" data-autoplay="true" data-loop="true" data-nav="false">
+          <div class="owl-carousel">
             <!-- First -->
-            <div class="flex flex-col justify-center items-center px-10 py-8 bg-[#F8F8F8] rounded-2xl">
+            <div class="item flex flex-col justify-center items-center px-10 py-8 bg-[#F8F8F8] rounded-2xl">
               <div class="flex items-center justify-between gap-2 w-full flex-wrap">
                 <div class="flex items-center justify-start gap-2">
                   <img src="/assets/testimonial/avatar.svg" alt="customer" class="!w-[80px] rounded-full" />
@@ -228,7 +247,7 @@
               </div>
             </div>
             <!-- Second -->
-            <div class="flex flex-col justify-center items-center px-10 py-8 bg-[#F8F8F8] rounded-2xl">
+            <div class="item flex flex-col justify-center items-center px-10 py-8 bg-[#F8F8F8] rounded-2xl">
               <div class="flex items-center justify-between gap-2 w-full flex-wrap">
                 <div class="flex items-center justify-start gap-2">
                   <img src="/assets/testimonial/avatar1.svg" alt="customer" class="!w-[80px] rounded-full" />
@@ -252,7 +271,7 @@
               </div>
             </div>
             <!-- Third -->
-            <div class="flex flex-col justify-center items-center px-10 py-8 bg-[#F8F8F8] rounded-2xl">
+            <div class="item flex flex-col justify-center items-center px-10 py-8 bg-[#F8F8F8] rounded-2xl">
               <div class="flex items-center justify-between gap-2 w-full flex-wrap">
                 <div class="flex items-center justify-start gap-2">
                   <img src="/assets/testimonial/avatar2.svg" alt="customer" class="!w-[80px] rounded-full" />
@@ -276,7 +295,7 @@
               </div>
             </div>
             <!-- Fouth -->
-            <div class="flex flex-col justify-center items-center px-10 py-8 bg-[#F8F8F8] rounded-2xl">
+            <div class="item flex flex-col justify-center items-center px-10 py-8 bg-[#F8F8F8] rounded-2xl">
               <div class="flex items-center justify-between gap-2 w-full flex-wrap">
                 <div class="flex items-center justify-start gap-2">
                   <img src="/assets/testimonial/avatar3.jpg" alt="customer" class="!w-[80px] rounded-full" />
