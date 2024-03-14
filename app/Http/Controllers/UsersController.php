@@ -50,6 +50,7 @@ class UsersController extends CustomBaseController
             'email_verified_at' => (key_exists('full_access', $params) && $params['full_access'] == true) ? now() : null,
             'is_email_verified' => (key_exists('full_access', $params) && $params['full_access'] == true) ? 1 : 0,
             'last_paid_at' => (key_exists('full_access', $params) && $params['full_access'] == true) ? now() : null,
+            'expired_at' => (key_exists('full_access', $params) && $params['full_access'] == true) ? now()->addYear() : null,
             'is_active' => (key_exists('is_active', $params) && $params['is_active'] == true) ? 1: 0,
         ]);
         return [

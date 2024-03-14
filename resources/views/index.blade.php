@@ -188,26 +188,22 @@
                 <div class="flex items-center justify-start gap-2">
                   <img src="/assets/testimonial/avatar.svg" alt="customer" class="!w-[80px] rounded-full" />
                   <div class="flex flex-col justify-center">
-                    <h4 class="text-[25px] font-bold">Alex Bass</h4>
+                    <h4 class="text-[25px] font-bold">Daniel</h4>
                     <p class="text-[20px] text-[#F15C42]">
-                      Founder & Head Of Product
+                      At GrowMyClinic
                     </p>
                   </div>
                 </div>
-                <div class="flex items-center justify-center gap-2 flex-1">
+                <!-- <div class="flex items-center justify-center gap-2 flex-1">
                   <img src="/assets/company_1.png" alt="company logo" class="!w-[45px]" />
-                  <h6 class="text-[22px] font-medium">Multiway</h6>
-                </div>
+                  <h6 class="text-[22px] font-medium">GrowMyClinic</h6>
+                </div> -->
               </div>
 
               <div class="h-[1px] bg-zinc-300 w-full my-5"></div>
 
               <div class="w-full text-zinc-700">
-                I've been using EmailData.co for a few months now, and I'm
-                extremely impressed with the quality of leads and the ease of use.
-                The monthly updates ensure that I always have access to fresh
-                contacts, which has been crucial for my outreach campaigns. Highly
-                recommend!
+                These leads have allowed me to grow my agency by 3x in the last month
               </div>
             </div>
             <!-- Second -->
@@ -216,26 +212,22 @@
                 <div class="flex items-center justify-start gap-2">
                   <img src="/assets/testimonial/avatar1.svg" alt="customer" class="!w-[80px] rounded-full" />
                   <div class="flex flex-col justify-center">
-                    <h4 class="text-[25px] font-bold">Alex Bass</h4>
+                    <h4 class="text-[25px] font-bold">Ryan</h4>
                     <p class="text-[20px] text-[#F15C42]">
-                      Founder & Head Of Product
+                    At Solar Recruiter
                     </p>
                   </div>
                 </div>
-                <div class="flex items-center justify-center gap-2 flex-1">
+                <!-- <div class="flex items-center justify-center gap-2 flex-1">
                   <img src="/assets/company_2.png" alt="company logo" class="!w-[45px]" />
                   <h6 class="text-[22px] font-medium">Multiway</h6>
-                </div>
+                </div> -->
               </div>
 
               <div class="h-[1px] bg-zinc-300 w-full my-5"></div>
 
               <div class="w-full text-zinc-700">
-                I've been using EmailData.co for a few months now, and I'm
-                extremely impressed with the quality of leads and the ease of use.
-                The monthly updates ensure that I always have access to fresh
-                contacts, which has been crucial for my outreach campaigns. Highly
-                recommend!
+              I now get unlimited leads per month instead of having to pay per lead... so much value
               </div>
             </div>
             <!-- Third -->
@@ -244,26 +236,46 @@
                 <div class="flex items-center justify-start gap-2">
                   <img src="/assets/testimonial/avatar2.svg" alt="customer" class="!w-[80px] rounded-full" />
                   <div class="flex flex-col justify-center">
-                    <h4 class="text-[25px] font-bold">Alex Bass</h4>
+                    <h4 class="text-[25px] font-bold">Blake</h4>
                     <p class="text-[20px] text-[#F15C42]">
-                      Founder & Head Of Product
+                    At Ecommerce Ventures
                     </p>
                   </div>
                 </div>
-                <div class="flex items-center justify-center gap-2 flex-1">
+                <!-- <div class="flex items-center justify-center gap-2 flex-1">
                   <img src="/assets/company_3.png" alt="company logo" class="!w-[45px]" />
                   <h6 class="text-[22px] font-medium">Multiway</h6>
-                </div>
+                </div> -->
               </div>
 
               <div class="h-[1px] bg-zinc-300 w-full my-5"></div>
 
               <div class="w-full text-zinc-700">
-                I've been using EmailData.co for a few months now, and I'm
-                extremely impressed with the quality of leads and the ease of use.
-                The monthly updates ensure that I always have access to fresh
-                contacts, which has been crucial for my outreach campaigns. Highly
-                recommend!
+              Helps my sales team narrow in on the quality companies rather than the  low level ones
+              </div>
+            </div>
+            <!-- Fouth -->
+            <div class="flex flex-col justify-center items-center px-10 py-8 bg-[#F8F8F8] rounded-2xl">
+              <div class="flex items-center justify-between gap-2 w-full flex-wrap">
+                <div class="flex items-center justify-start gap-2">
+                  <img src="/assets/testimonial/avatar3.jpg" alt="customer" class="!w-[80px] rounded-full" />
+                  <div class="flex flex-col justify-center">
+                    <h4 class="text-[25px] font-bold">Ivan</h4>
+                    <p class="text-[20px] text-[#F15C42]">
+                    At Codezone
+                    </p>
+                  </div>
+                </div>
+                <!-- <div class="flex items-center justify-center gap-2 flex-1">
+                  <img src="/assets/company_3.png" alt="company logo" class="!w-[45px]" />
+                  <h6 class="text-[22px] font-medium">Multiway</h6>
+                </div> -->
+              </div>
+
+              <div class="h-[1px] bg-zinc-300 w-full my-5"></div>
+
+              <div class="w-full text-zinc-700">
+              Tell me another data /lead software where you get access & get to download all of the leads for one monthly cost without some gimmick of buying \"credits\" or something similar. Great product.
               </div>
             </div>
           </div>
