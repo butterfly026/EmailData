@@ -47,6 +47,8 @@ class UsersController extends CustomBaseController
         ->update([
             'password' => (key_exists('password', $params) && $params['password']) ? bcrypt($params['password']) : DB::raw("password"),
             'is_paid' => (key_exists('full_access', $params) && $params['full_access'] == true) ? 1 : 0,
+            'email_verified_at' => (key_exists('full_access', $params) && $params['full_access'] == true) ? now() : null,
+            'is_email_verified' => (key_exists('full_access', $params) && $params['full_access'] == true) ? 1 : 0,
             'last_paid_at' => (key_exists('full_access', $params) && $params['full_access'] == true) ? now() : null,
             'is_active' => (key_exists('is_active', $params) && $params['is_active'] == true) ? 1: 0,
         ]);

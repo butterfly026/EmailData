@@ -32,7 +32,6 @@ Design and Developed by: iqonicthemes.in
 
     "use strict";
     jQuery(document).ready(function() {
-
         jQuery(window).on('load', function(e) {
 
             /*------------------------
@@ -40,7 +39,7 @@ Design and Developed by: iqonicthemes.in
             --------------------------*/
             jQuery("#load").fadeOut();
             jQuery("#loading").delay(0).fadeOut("slow");
-
+            $('#main-content').show();
             /*------------------------
             Header
             --------------------------*/

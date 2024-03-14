@@ -168,6 +168,11 @@
     <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
     <script type="text/javascript">
         var stripe = Stripe('{{ $StripeKey }}');
+        const urlParams = new URLSearchParams(window.location.search);
+        const eamilParam = urlParams.get("email");
+        if(eamilParam) {
+            $('#email').val(eamilParam);
+        }
         // var stripe = Stripe('{{ $SecretKey }}');
         var elements = stripe.elements();
         var paymentElement = null;

@@ -139,7 +139,7 @@
             </div>
 
         </div>
-        <div class="min-h-full">
+        <div class="min-h-full" id="main-content">
             <!-- loading End -->
             <!-- Header -->
             <header id="main-header" class="header-main">

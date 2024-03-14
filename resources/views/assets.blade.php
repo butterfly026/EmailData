@@ -15,12 +15,12 @@
     <meta name="og:type" content="website" />
     <meta name="og:image:type" content="image/jpeg" />
     <title>@yield('title') - Email Data</title>
+    <link rel="stylesheet" href="/css/typography.css">
     <!-- Favicon -->
     <link rel="shortcut icon" href="/images/favicon.ico" />
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <!-- Typography CSS -->
-    <link rel="stylesheet" href="/css/typography.css">
     <!-- Style CSS -->
     <link rel='stylesheet' href='/css/phifi-style.css' />
     <!-- Responsive CSS -->
