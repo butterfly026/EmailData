@@ -250,7 +250,7 @@
             <div class="item flex flex-col justify-center items-center px-10 py-8 bg-[#F8F8F8] rounded-2xl">
               <div class="flex items-center justify-between gap-2 w-full flex-wrap">
                 <div class="flex items-center justify-start gap-2">
-                  <img src="/assets/testimonial/avatar1.svg" alt="customer" class="!w-[80px] rounded-full" />
+                  <img src="/assets/testimonial/avatar1.jpg" alt="customer" class="!w-[80px] rounded-full" />
                   <div class="flex flex-col justify-center">
                     <h4 class="text-[25px] font-bold">Ryan</h4>
                     <p class="text-[20px] text-[#F15C42]">
