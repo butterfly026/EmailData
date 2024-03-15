@@ -132,7 +132,7 @@
                                     @if (!Auth::user())
                                         <a class="iq-button btn-radius" href="payout_non_user"><span>Access All
                                                 Data!</span><em></em></a>
-                                    @elseif (Auth::user()->is_paid != 0)
+                                    @elseif (Auth::user()->is_paid == 0)
                                         <a class="iq-button btn-radius" href="payout"><span>Access All
                                                 Data!</span><em></em></a>
                                     @endif
