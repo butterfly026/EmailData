@@ -203,7 +203,7 @@
               </div>
             </div>
             <a class="uppercase px-7 py-5 bg-[#303030] text-white rounded-full" href="/payout_non_user">
-              Try For Free
+              Get Started
             </a>
           </div>
           <div>

@@ -154,7 +154,7 @@
                                         style="visibility: visible; animation-name: fadeIn;">You are currently viewing
                                         unlimited 28,000+ results</h2>
                                     <p class="text-white wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
-                                        You can access all data!! </span></p>
+                                    You now have access to unlimited results!</span></p>
                                 </div>
                             </div>
                         </div>
