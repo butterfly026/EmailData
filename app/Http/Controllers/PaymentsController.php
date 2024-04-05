@@ -303,11 +303,7 @@ class PaymentsController extends CustomBaseController
         $paymentIntent = $client->paymentIntents->retrieve($params['payment_intent'], []);
         $email = $paymentIntent['receipt_email'];
         $payment = Payments::create([
-            'user_email' => $email,
-            // 'card_number' => $params['card_number'],
-            // 'expiration' => $params['expiration'],
-            // 'cvc' => $params['cvc'],
-            // 'card_holder_name' => $params['holder_name'],
+            'user_email' => $email,            
             'amount' => $paymentIntent['amount'] / 100,
             'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
             'ordered_at' => now()->toDateTimeString(),
@@ -362,11 +358,7 @@ class PaymentsController extends CustomBaseController
     function sendPaymentEmail(Request $request): mixed
     {
         $params = $request->validate([
-            'user_email' => 'required|email',
-            // 'card_number' => 'required|string',
-            // 'expiration' => 'required|string',
-            // 'cvc' => 'required|string',
-            // 'holder_name' => 'required|string',
+            'user_email' => 'required|email',            
         ]);
         $setting = Settings::where('key', 'payments')->first();
         if (!$setting) {

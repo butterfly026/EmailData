@@ -114,6 +114,7 @@
                                     <th style="min-width: 150px;">City</th>
                                     <th style="min-width: 150px;">State</th>
                                     <th style="min-width: 150px;">Country</th>
+                                    <th style="min-width: 150px;">Industry</th>
                                 </tr>
                             </thead>
                             <tbody id="tbodyResult">
@@ -197,6 +198,7 @@
                                 tagRes += '<td class="result-detail">' + item.city + '</td>';
                                 tagRes += '<td class="result-detail">' + item.state + '</td>';
                                 tagRes += '<td class="result-detail">' + item.country + '</td>';
+                                tagRes += '<td class="result-detail">' + item.industry + '</td>';
                                 tagRes += '</tr>';
                                 $('#tbodyResult').append($(tagRes));
                             });

@@ -175,6 +175,7 @@ class MarketingsController extends CustomBaseController
                 'City' => $item->city ?? '-',
                 'State' => $item->state ?? '-',
                 'Country' => $item->country ?? '-',
+                'Industry' => $item->industry ?? '-',
             ];
         });
     }
@@ -268,6 +269,7 @@ class MarketingsController extends CustomBaseController
                 'city' => $item->city ?? '-',
                 'state' => $item->state ?? '-',
                 'country' => $item->country ?? '-',
+                'Industry' => $item->industry ?? '-',
             ];
         });
     }
