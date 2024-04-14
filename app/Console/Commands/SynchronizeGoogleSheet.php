@@ -53,6 +53,7 @@ class SynchronizeGoogleSheet extends Command
         $tmpData = [];
         if (!empty($values)) {
             Marketings::truncate();
+            logger()->info(count($values) . ' Google Sheet records will be updated!' );
             foreach ($values as $row) {
                 // Process each row of data
                 // $row is an array containing the cell values
