@@ -68,6 +68,9 @@ class MarketingsController extends CustomBaseController
             ->orWhereLike($params['criteria'], 'company')
             ->orWhereLike($params['criteria'], 'domain')
             ->orWhereLike($params['criteria'], 'city')
+            ->orWhereLike($params['criteria'], 'state')
+            ->orWhereLike($params['criteria'], 'country')
+            ->orWhereLike($params['criteria'], 'industry')
             ->paginate($this->perPage());
         return $marketing;
     }
@@ -133,6 +136,7 @@ class MarketingsController extends CustomBaseController
             ->orWhereLike($params['criteria'], 'city')
             ->orWhereLike($params['criteria'], 'state')
             ->orWhereLike($params['criteria'], 'country')
+            ->orWhereLike($params['criteria'], 'industry')
             ->limit(5)->get();
         return [
             'data' => $marketing,
@@ -194,6 +198,7 @@ class MarketingsController extends CustomBaseController
                 ->orWhereLike($params['criteria'], 'city')
                 ->orWhereLike($params['criteria'], 'state')
                 ->orWhereLike($params['criteria'], 'country')
+                ->orWhereLike($params['criteria'], 'industry')
                 ->limit($params['limit'] > 5 ? 5 : $params['limit']);
         else
             return Marketings::whereLike($params['criteria'], 'first_name')
@@ -205,6 +210,7 @@ class MarketingsController extends CustomBaseController
                 ->orWhereLike($params['criteria'], 'city')
                 ->orWhereLike($params['criteria'], 'state')
                 ->orWhereLike($params['criteria'], 'country')
+                ->orWhereLike($params['criteria'], 'industry')
                 ->order()
                 ->limit($params['limit']);
     }
