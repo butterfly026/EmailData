@@ -81,6 +81,7 @@ class SynchronizeGoogleSheet extends Command
                 $tmpData = [];
             }
         } else {
+            logger()->info('Fetched no Google Sheet records' );
             // No data found in the specified sheet
         }
         return Command::SUCCESS;
