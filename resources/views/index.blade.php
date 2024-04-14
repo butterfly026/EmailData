@@ -160,8 +160,8 @@
       </section>
 
       <section class="w-full lg:container mb-20 mx-auto">
-        <div class="flex justify-center items-start gap-5 flex-col lg:flex-row">
-          <div class="flex flex-col gap-5 justify-center items-start py-10">
+        <div class="flex justify-center items-center gap-5 flex-col lg:flex-row">
+          <div class="sm:p-[50px] md:p-[20px] flex flex-col gap-5 justify-center items-center py-10">
             <button class="px-7 py-4 bg-[#FFEAE7] text-[#F15C42] rounded-full font-medium">
               Discover Top Professionals
             </button>

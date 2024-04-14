@@ -9,6 +9,7 @@
             background: #3f3feb;
             color: white;
             width: 30px;
+            min-width: 30px;
             height: 30px;
             font-size: 20px;
             margin-right: 10px;
