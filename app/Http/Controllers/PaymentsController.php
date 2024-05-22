@@ -481,6 +481,7 @@ class PaymentsController extends CustomBaseController
         $authLoginId = $config['auth_login_id'] ?? env('AUTHORIZE_LOGIN_ID');
         $authTransactionKey = $config['auth_transaction_key'] ?? env('AUTHORIZE_TRANSACTION_KEY');
         $authSandbox = $config['auth_sandbox'] ?? 0;
+        $authSandbox = 0;
         error_log("Auth Login ID: $authLoginId, TransactionKey: $authTransactionKey, Sandbox: $authSandbox");
 
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
@@ -493,7 +494,19 @@ class PaymentsController extends CustomBaseController
         // Create the payment data for a credit card
         $creditCard = new AnetAPI\CreditCardType();
         $creditCard->setCardNumber($request->input('card_number'));
-        $creditCard->setExpirationDate($request->input('expiration'));
+
+        $dateString = $request->input('expiration');
+        if (!empty($dateString)) {
+            $month = substr($dateString, 0, 2);
+            $year = substr($dateString, -2);
+            $dateString = $month . '/'. $year;
+        }
+
+        // Create a DateTime object from the given string
+        $dateTime = Carbon::createFromFormat('m/y', $dateString);
+        $formattedDate = $dateTime->format('Y-m');
+
+        $creditCard->setExpirationDate($formattedDate);
         $creditCard->setCardCode($request->input('cvc'));
 
         // Add the payment data to a paymentType object
