@@ -17,6 +17,8 @@ use Stripe\Stripe;
 use Stripe\StripeClient;
 use Stripe\Customer;
 use Stripe\Charge;
+use net\authorize\api\controller as AnetController;
+use net\authorize\api\contract\v1 as AnetAPI;
 
 class PaymentsController extends CustomBaseController
 {
@@ -101,7 +103,7 @@ class PaymentsController extends CustomBaseController
             'currency' => 'usd',
             'customer' => $user->stripe_customer_id,
         ]);
-        if ($charge->status == 'succeeded') {            
+        if ($charge->status == 'succeeded') {
             if ($user) {
                 $user->is_paid = 1;
                 $user->last_paid_at = now();
@@ -303,7 +305,7 @@ class PaymentsController extends CustomBaseController
         $paymentIntent = $client->paymentIntents->retrieve($params['payment_intent'], []);
         $email = $paymentIntent['receipt_email'];
         $payment = Payments::create([
-            'user_email' => $email,            
+            'user_email' => $email,
             'amount' => $paymentIntent['amount'] / 100,
             'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
             'ordered_at' => now()->toDateTimeString(),
@@ -333,7 +335,8 @@ class PaymentsController extends CustomBaseController
 
         return redirect('/home');
     }
-    function cancelSubscription(Request $request){
+    function cancelSubscription(Request $request)
+    {
         $params = $request->all();
         $email = $params["user_email"];
         $user = User::where('email', $email)->first();
@@ -358,7 +361,7 @@ class PaymentsController extends CustomBaseController
     function sendPaymentEmail(Request $request): mixed
     {
         $params = $request->validate([
-            'user_email' => 'required|email',            
+            'user_email' => 'required|email',
         ]);
         $setting = Settings::where('key', 'payments')->first();
         if (!$setting) {
@@ -393,7 +396,7 @@ class PaymentsController extends CustomBaseController
         }
     }
 
-    function confirm_payout(Request $request)
+    function confirm_payout_stripe(Request $request)
     {
         $params = $request->validate([
             'email' => 'required|email',
@@ -422,7 +425,7 @@ class PaymentsController extends CustomBaseController
             'user_email' => $user->email,
             'amount' => $amount,
             'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
-            'ordered_at' => now()->toDateTimeString(),            
+            'ordered_at' => now()->toDateTimeString(),
         ]);
 
         $payment->confirmed_at = now()->toDateTimeString();
@@ -431,7 +434,7 @@ class PaymentsController extends CustomBaseController
             'currency' => 'usd',
             'customer' => $user->stripe_customer_id,
         ]);
-        if ($charge->status == 'succeeded') {            
+        if ($charge->status == 'succeeded') {
             if ($user) {
                 $user->is_paid = 1;
                 $user->last_paid_at = now();
@@ -465,5 +468,90 @@ class PaymentsController extends CustomBaseController
         return [
             'order_no' => $payment->order_no
         ];
+    }
+
+    function confirm_payout(Request $request)
+    {
+        $setting = Settings::where('key', 'payments')->first();
+        if (!$setting) {
+            Err::throw('Contact to administrator to pay out!!');
+        }
+        $config = json_decode($setting->value, true);
+        $amount = $config['pay_amount'] ?? 200;
+        $authLoginId = $config['auth_login_id'] ?? env('AUTHORIZE_LOGIN_ID');
+        $authTransactionKey = $config['auth_transaction_key'] ?? env('AUTHORIZE_TRANSACTION_KEY');
+        $authSandbox = $config['auth_sandbox'] ?? 0;
+        error_log("Auth Login ID: $authLoginId, TransactionKey: $authTransactionKey, Sandbox: $authSandbox");
+
+        $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
+        $merchantAuthentication->setName($authLoginId);
+        $merchantAuthentication->setTransactionKey($authTransactionKey);
+
+        // Set the transaction's refId
+        $refId = 'ref' . time();
+
+        // Create the payment data for a credit card
+        $creditCard = new AnetAPI\CreditCardType();
+        $creditCard->setCardNumber($request->input('card_number'));
+        $creditCard->setExpirationDate($request->input('expiration'));
+        $creditCard->setCardCode($request->input('cvc'));
+
+        // Add the payment data to a paymentType object
+        $paymentOne = new AnetAPI\PaymentType();
+        $paymentOne->setCreditCard($creditCard);
+
+        $customerData = new AnetAPI\CustomerDataType();
+        $customerData->setType("individual");
+        $customerData->setId(strtoupper('D' . uniqid() . rand(1000, 9999)));
+        $customerData->setEmail($request->input('user_email'));
+
+
+        // Create order information
+        $order = new AnetAPI\OrderType();
+        $order->setInvoiceNumber("10101");
+        $order->setDescription("Gadget");
+
+        // // Set the customer's Bill To address
+        // $customerAddress = new AnetAPI\CustomerAddressType();
+        // $customerAddress->setFirstName($request->input('first_name'));
+        // $customerAddress->setLastName($request->input('last_name'));
+        // $customerAddress->setCompany($request->input('company'));
+        // $customerAddress->setAddress($request->input('address'));
+        // $customerAddress->setCity($request->input('city'));
+        // $customerAddress->setState($request->input('state'));
+        // $customerAddress->setZip($request->input('zip'));
+        // $customerAddress->setCountry($request->input('country'));
+
+        // Create a transaction
+        $transactionRequestType = new AnetAPI\TransactionRequestType();
+        $transactionRequestType->setTransactionType("authCaptureTransaction");
+        $transactionRequestType->setAmount($amount * 100);
+        $transactionRequestType->setOrder($order);
+        $transactionRequestType->setPayment($paymentOne);
+        // $transactionRequestType->setBillTo($customerAddress);
+
+        $request = new AnetAPI\CreateTransactionRequest();
+        $request->setMerchantAuthentication($merchantAuthentication);
+        $request->setRefId($refId);
+        $request->setTransactionRequest($transactionRequestType);
+        $controller = new AnetController\CreateTransactionController($request);
+
+        $response = $controller->executeWithApiResponse($authSandbox == 1 ? \net\authorize\api\constants\ANetEnvironment::SANDBOX :
+            \net\authorize\api\constants\ANetEnvironment::PRODUCTION);
+
+
+        if ($response != null) {
+            $tresponse = $response->getTransactionResponse();
+            error_log(json_encode($response));
+            if (($tresponse != null) && ($tresponse->getResponseCode() == "1")) {
+                echo "Charge Credit Card AUTH CODE : " . $tresponse->getAuthCode() . "\n";
+                echo "Charge Credit Card TRANS ID  : " . $tresponse->getTransId() . "\n";
+                return "Transaction Successful!";
+            } else {
+                Err::Throw('An error occurred while creating payment. ' . $tresponse->getErrors()[0]->getErrorText());
+            }
+        } else {
+            Err::Throw('An error occurred while creating payment');
+        }
     }
 }

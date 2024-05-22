@@ -37,11 +37,30 @@
             bottom: 0px;
             z-index: -1;
         }
+
         .form-group {
             height: 65px;
         }
+
         input:focus {
             outline: 0;
+            border-color: hsla(210, 96%, 45%, 50%) !important;
+            box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(0, 0, 0, 0.02), 0 0 0 3px hsla(210, 96%, 45%, 25%), 0 1px 1px 0 rgba(0, 0, 0, 0.08) !important;
+        }
+
+        .card-element {
+            border-radius: 5px;
+            width: 100%;
+            float: left;
+            padding: 0 15px;
+            height: 45px;
+            line-height: 48px;
+            border: 1px solid #eeeeee;
+            color: #525564;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .card-element:hover {
             border-color: hsla(210, 96%, 45%, 50%) !important;
             box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(0, 0, 0, 0.02), 0 0 0 3px hsla(210, 96%, 45%, 25%), 0 1px 1px 0 rgba(0, 0, 0, 0.08) !important;
         }
@@ -112,10 +131,28 @@
                                     autocomplete="new-password" />
                             </div>
                         </div>
-
-                        <div id="card-element" style="margin-top: 10px;">
-                            <!-- A Stripe Element will be inserted here. -->
+                        <div class="form-group" style="margin-top: 10px;">
+                            <span>Card Number</span>
+                            <div id="card-number" class="card-element">
+                            </div>
                         </div>
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <span>Expiration</span>
+                                    <div id="card-expiry" class="card-element">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <span>CVC</span>
+                                    <div id="card-cvc" class="card-element">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="flex items-center justify-end text-center" style="margin-top: 10px;">
                             <button id="btnPayout" class="btn btn-primary mt-4" style="padding: 15px 45px">
                                 {{ __('Pay Now') }}
@@ -132,8 +169,14 @@
     <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
     <script type="text/javascript">
         var stripe = Stripe('{{ $StripeKey }}');
+        const urlParams = new URLSearchParams(window.location.search);
+        const eamilParam = urlParams.get("email");
+        if(eamilParam) {
+            $('#email').val(eamilParam);
+        }
         // var stripe = Stripe('{{ $SecretKey }}');
         var elements = stripe.elements();
+        var paymentElement = null;
         let userEmail = "{{ Auth::user() ? Auth::user()->email : '' }}";
 
         var style = {
@@ -152,63 +195,57 @@
         const items = [{
             id: "xl-tshirt"
         }];
-        let hasError = false;
+        let hasError1 = false;
+        let hasError2 = false;
+        let hasError3 = false;
+        var cardNumber = null;
         async function initialize() {
             if (userEmail)
                 $('#signup-form').hide();
             $('#preloader').show();
-            $.ajax({
-                url: "{{ route('api.payments.checkout') }}",
-                type: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                },
-                success: function(res) {
-                    $('#preloader').hide();
-                    const appearance = {
-                        theme: 'stripe',
 
-                        variables: {
-                            colorPrimary: '#0570de',
-                            colorBackground: '#ffffff',
-                            colorText: '#30313d',
-                            colorDanger: '#df1b41',
-                            fontFamily: 'Ideal Sans, system-ui, sans-serif',
-                            spacingUnit: '4px',
-                            borderRadius: '4px',
-                            gridRowSpacing: '10px',
-                            // See all possible variables below
+            const elementStyle = {
+                showIcon: true,
+                style: {
+                    base: {
+                        fontWeight: '500',
+                        fontFamily: 'Poppins, sans-serif',
+                        fontSize: '16px',
+                        fontSmoothing: 'antialiased',
+                        borderRadius: '5px',
+                        height: '43.39px',
+                        lineHeight: '43.39px',
+                        color: '#525564',
+                        transition: 'all 0.3s ease-in-out',
+                        ':-webkit-autofill': {
+                            color: '#525564',
                         },
-                        rules: {
-                            ".Label": {
-                                marginTop: '7px'
-                            }
-                        }
-                    };
-                    elements = stripe.elements({
-                        clientSecret: res.clientSecret,
-                        appearance
-                    });
-                    const paymentElementOptions = {
-                        layout: "tabs",
-                        paymentMethodOrder: ['card'],
-                        wallets: {
-                            googlePay: 'never'
-                        }
-                    };
-
-                    const paymentElement = elements.create("payment", paymentElementOptions);
-                    paymentElement.mount("#card-element");
-                    paymentElement.on('change', function(event) { 
-                        hasError = !event.complete;
-                    });
+                        '::placeholder': {
+                            color: '#525564',
+                        },
+                    },
                 },
-                error: function(msg) {
-                    $('#preloader').hide();
-                    console.log(msg);
-                }
-            });
+            };
 
+            elements = stripe.elements();
+            cardNumber = elements.create('cardNumber', elementStyle);
+            var cardExpiry = elements.create('cardExpiry', elementStyle);
+            var cardCvc = elements.create('cardCvc', elementStyle);
+            cardNumber.mount('#card-number');
+            cardExpiry.mount('#card-expiry');
+            cardCvc.mount('#card-cvc');
+            // paymentElement = elements.create("payment", paymentElementOptions);
+            // paymentElement.mount("#card-element");
+            cardNumber.on('change', function(event) {
+                hasError1 = !event.complete;
+            });
+            cardExpiry.on('change', function(event) {
+                hasError2 = !event.complete;
+            });
+            cardCvc.on('change', function(event) {
+                hasError3 = !event.complete;
+            });
+            $('#preloader').hide();
         }
         initialize();
 
@@ -252,52 +289,42 @@
         }
 
         async function payout() {
-            // const {
-            //     error
-            // } = await stripe.confirmPayment({
-            //     elements,
-            //     confirmParams: {
-            //         // Make sure to change this to your payment completion page
-            //         return_url: "{{ route('payments.paySuccess') }}",
-            //         receipt_email: userEmail ?? '',
-            //     },
-            // });
-            if(hasError) return;
-            let jsonStr = JSON.stringify({
-                        elements,
-                        confirmParams: {
-                            // Make sure to change this to your payment completion page
-                            return_url: "{{ route('payments.paySuccess') }}",
-                            receipt_email: userEmail ?? '',
+            if (hasError1 || hasError2 || hasError3) return;
+            stripe.createToken(cardNumber).then((result) => {
+                if (result.error) {
+                    toastMessage('error', result.error.mesage);
+                    $('#preloader').hide();
+                } else {
+                    $.ajax({
+                        url: "{{ route('api.payments.confirm_payout') }}",
+                        type: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            email: userEmail,
+                            token_id: result.token.id
                         },
+                        success: function(res) {
+                            $('#preloader').hide();
+                            if (res.code) {
+                                toastMessage('error', res.message ??
+                                    'An error occured while signing up new user');
+                            } else {
+                                toastMessage('success',
+                                    'Thank you for your payment! You will be redirected to your dashboard in the next few seconds',
+                                    10000);
+                                setTimeout(() => {
+                                    window.location.href = '/';
+                                }, 4000);
+                            }
+                        },
+                        error: function(msg) {
+                            $('#preloader').hide();
+                            toastMessage('error', msg.message ??
+                                'An error occured while signing up new user');
+                        }
                     });
-            let jsonDt = JSON.parse(jsonStr);
-            $.ajax({
-                url: "{{ route('api.payments.send_payment_email') }}",
-                type: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    user_email: userEmail,
-                    data: jsonDt
-                },
-                success: function(res) {
-                    $('#preloader').hide();
-                    if (res.code) {
-                        toastMessage('error', res.message ??
-                            'An error occured while paying for full access');
-                    } else {
-                        toastMessage('success', 
-                            'Please verify your payment in your mail box. We have sent an email to your email address!',
-                            20000);
-                    }
-                },
-                error: function(msg) {
-                    $('#preloader').hide();
-                    toastMessage('error', msg.message ??
-                        'An error occured while paying for full access');
                 }
-            });
-            
+            })
         }
         $('#btnPayout').click(async function(e) {
             if (!userEmail && !validateSignup()) return;
@@ -312,7 +339,6 @@
                         password: $('#password').val()
                     },
                     success: function(res) {
-                        $('#preloader').hide();
                         if (res.code) {
                             toastMessage('error', res.message ??
                                 'An error occured while signing up new user');

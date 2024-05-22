@@ -23,14 +23,36 @@
                             <div class='row'>
                                 <div class='col-12'>
                                     <div class="search-form display-flex admin-search-form">
-                                        <span class="form-label" style="width: 300px;">Stripe Secret Key:&nbsp;</span>
+                                        <span class="form-label" style="width: 320px;">Authorize.net Login Id:&nbsp;</span>
+                                        <input type="text" class="search-field" value="" role="presentation"
+                                            autocomplete="off" name="auth_login_id" />
+                                    </div>
+                                </div>
+                                <div class='col-12'>
+                                    <div class="search-form display-flex admin-search-form">
+                                        <span class="form-label" style="width: 320px;">Authorize.net Transaction Key:&nbsp;</span>
+                                        <input type="text" class="search-field" value="" role="presentation"
+                                            autocomplete="off" name="auth_transaction_key" />
+                                    </div>
+                                </div>
+                                <div class='col-12'>
+                                    <div class="search-form display-flex admin-search-form">
+                                        <span class="form-label" style="width: 320px;">Authorize.net Release:&nbsp;</span>
+                                        <input type="text" class="search-field" value="" role="presentation"
+                                            autocomplete="off" name="auth_sandbox" />
+                                    </div>
+                                </div>
+
+                                <div class='col-12'>
+                                    <div class="search-form display-flex admin-search-form">
+                                        <span class="form-label" style="width: 320px;">Stripe Secret Key:&nbsp;</span>
                                         <input type="text" class="search-field" value="" role="presentation"
                                             autocomplete="off" name="stripe_secret_key" />
                                     </div>
                                 </div>
                                 <div class='col-12'>
                                     <div class="search-form display-flex admin-search-form">
-                                        <span class="form-label" style="width: 300px;">Stripe API Key:&nbsp;</span>
+                                        <span class="form-label" style="width: 320px;">Stripe API Key:&nbsp;</span>
                                         <input type="text" class="search-field" value="" role="presentation"
                                             autocomplete="off" name="stripe_api_key" />
                                     </div>
@@ -38,14 +60,14 @@
                                 
                                 <div class='col-12'>
                                     <div class="search-form display-flex admin-search-form">
-                                        <span class="form-label" style="width: 300px;">Web Hook Key:&nbsp;</span>
+                                        <span class="form-label" style="width: 320px;">Web Hook Key:&nbsp;</span>
                                         <input type="text" class="search-field" value="" role="presentation"
                                             autocomplete="off" name="web_hook_secret" />
                                     </div>
                                 </div>
                                 <div class='col-12'>
                                     <div class="search-form display-flex admin-search-form">
-                                        <span class="form-label" style="width: 300px;">Full Access Pay
+                                        <span class="form-label" style="width: 320px;">Full Access Pay
                                             Amount($):&nbsp;</span>
                                         <input type="number" class="search-field" value="" role="presentation"
                                             autocomplete="off" name="pay_amount" />
@@ -53,7 +75,7 @@
                                 </div>
                                 <div class='col-12'>
                                     <div class="search-form display-flex admin-search-form">
-                                        <span class="form-label" style="width: 300px;">Maximum reach number:&nbsp;</span>
+                                        <span class="form-label" style="width: 320px;">Maximum reach number:&nbsp;</span>
                                         <input type="number" class="search-field" value="" role="presentation"
                                             autocomplete="off" name="max_free_num" />
                                     </div>
@@ -229,6 +251,9 @@
                         $('input[name="web_hook_secret"]').val(value.web_hook_secret ?? '');
                         $('input[name="pay_amount"]').val(value.pay_amount ?? 0);
                         $('input[name="max_free_num"]').val(value.max_free_num ?? 1);
+                        $('input[name="auth_login_id"]').val(value.auth_login_id ?? '');
+                        $('input[name="auth_transaction_key"]').val(value.auth_transaction_key ?? '');
+                        $('input[name="auth_sandbox"]').val(value.auth_sandbox ?? 1);
                     } else {
                         toastMessage('error', res.message ?? 'An error occured while searching data');
                     }
@@ -256,6 +281,9 @@
                         web_hook_secret: $('input[name="web_hook_secret"]').val(),
                         pay_amount: $('input[name="pay_amount"]').val(),
                         max_free_num: $('input[name="max_free_num"]').val(),
+                        auth_login_id: $('input[name="auth_login_id"]').val(),
+                        auth_transaction_key: $('input[name="auth_transaction_key"]').val(),
+                        auth_sandbox: $('input[name="auth_sandbox"]').val(),
                     })
                 },
                 success: function(res) {
