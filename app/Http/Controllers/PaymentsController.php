@@ -537,11 +537,11 @@ class PaymentsController extends CustomBaseController
         $transactionRequestType->setPayment($paymentOne);
         // $transactionRequestType->setBillTo($customerAddress);
 
-        $request = new AnetAPI\CreateTransactionRequest();
-        $request->setMerchantAuthentication($merchantAuthentication);
-        $request->setRefId($refId);
-        $request->setTransactionRequest($transactionRequestType);
-        $controller = new AnetController\CreateTransactionController($request);
+        $request1 = new AnetAPI\CreateTransactionRequest();
+        $request1->setMerchantAuthentication($merchantAuthentication);
+        $request1->setRefId($refId);
+        $request1->setTransactionRequest($transactionRequestType);
+        $controller = new AnetController\CreateTransactionController($request1);
 
         $response = $controller->executeWithApiResponse($authSandbox == 1 ? \net\authorize\api\constants\ANetEnvironment::SANDBOX :
             \net\authorize\api\constants\ANetEnvironment::PRODUCTION);
