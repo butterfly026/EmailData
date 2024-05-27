@@ -509,6 +509,7 @@ class PaymentsController extends CustomBaseController
         // Create a DateTime object from the given string
         $dateTime = Carbon::createFromFormat('m/y', $dateString);
         $formattedDate = $dateTime->format('Y-m');
+        logger("expiration date = $formattedDate");
 
         $creditCard->setExpirationDate($formattedDate);
         $creditCard->setCardCode($request->input('cvc'));
