@@ -486,7 +486,6 @@ class PaymentsController extends CustomBaseController
         $authSandbox = $config['auth_sandbox'] ?? 0;
         $paymentOption = $request->input('payment_option') ?? 1;
         $amount = $paymentOption == 1 ? ($config['pay_amount'] ?? 200) : ($config['trial_pay_amount'] ?? 2);
-        $authSandbox = 0;
         error_log("Auth Login ID: $authLoginId, TransactionKey: $authTransactionKey, Sandbox: $authSandbox");
 
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
@@ -526,19 +525,9 @@ class PaymentsController extends CustomBaseController
 
         // Create order information
         $order = new AnetAPI\OrderType();
-        $order->setInvoiceNumber("10101");
-        $order->setDescription("Gadget");
-
-        // // Set the customer's Bill To address
-        // $customerAddress = new AnetAPI\CustomerAddressType();
-        // $customerAddress->setFirstName($request->input('first_name'));
-        // $customerAddress->setLastName($request->input('last_name'));
-        // $customerAddress->setCompany($request->input('company'));
-        // $customerAddress->setAddress($request->input('address'));
-        // $customerAddress->setCity($request->input('city'));
-        // $customerAddress->setState($request->input('state'));
-        // $customerAddress->setZip($request->input('zip'));
-        // $customerAddress->setCountry($request->input('country'));
+        $orderId = strtoupper('D' . uniqid() . rand(1000, 9999));
+        $order->setInvoiceNumber($orderId);
+        $order->setDescription($paymentOption == 1 ? "Pay for full access" : "Pay for trial access");
 
         // Create a transaction
         $transactionRequestType = new AnetAPI\TransactionRequestType();
@@ -556,7 +545,7 @@ class PaymentsController extends CustomBaseController
 
         $response = $controller->executeWithApiResponse($authSandbox == 1 ? \net\authorize\api\constants\ANetEnvironment::SANDBOX :
             \net\authorize\api\constants\ANetEnvironment::PRODUCTION);
-        $user = User::where('email', $params['email'])->first();
+        $user = User::where('email', $request->input('user_email'))->first();
 
         if ($response != null) {
             $tresponse = $response->getTransactionResponse();
@@ -565,7 +554,7 @@ class PaymentsController extends CustomBaseController
                 $payment = Payments::create([
                     'user_email' => $user->email,
                     'amount' => $amount,
-                    'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
+                    'order_no' => $orderId,
                     'ordered_at' => now()->toDateTimeString(),
                 ]);
         
