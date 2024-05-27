@@ -300,7 +300,7 @@ class PaymentsController extends CustomBaseController
         $params = $request->all();
         $setting = Settings::where('key', 'payments')->first();
         if (!$setting) {
-            error_log('ERRRRRR');
+            logger('ERRRRRR');
             Err::throw('Contact to administrator to pay out!!');
         }
         $config = json_decode($setting->value, true);
@@ -486,7 +486,7 @@ class PaymentsController extends CustomBaseController
         $authSandbox = $config['auth_sandbox'] ?? 0;
         $paymentOption = $request->input('payment_option') ?? 1;
         $amount = $paymentOption == 1 ? ($config['pay_amount'] ?? 200) : ($config['trial_pay_amount'] ?? 2);
-        error_log("Auth Login ID: $authLoginId, TransactionKey: $authTransactionKey, Sandbox: $authSandbox");
+        logger("Auth Login ID: $authLoginId, TransactionKey: $authTransactionKey, Sandbox: $authSandbox");
 
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
         $merchantAuthentication->setName($authLoginId);
@@ -549,7 +549,7 @@ class PaymentsController extends CustomBaseController
 
         if ($response != null) {
             $tresponse = $response->getTransactionResponse();
-            error_log(json_encode($response));
+            logger(json_encode($response));
             if (($tresponse != null) && ($tresponse->getResponseCode() == "1")) {
                 $payment = Payments::create([
                     'user_email' => $user->email,
