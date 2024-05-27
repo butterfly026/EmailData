@@ -45,7 +45,9 @@ class PaymentsController extends CustomBaseController
         $StripeKey = $config['stripe_api_key'];
         $SecretKey = $config['stripe_secret_key'];
         $PayAmount = $config['pay_amount'] ?? 200;
-        return view('payout', compact('StripeKey', 'SecretKey', 'PayAmount'));
+        $TrialPayAmount = $config['trial_pay_amount'] ?? 2;
+        
+        return view('payout', compact('StripeKey', 'SecretKey', 'PayAmount', 'TrialPayAmount'));
     }
 
     public function payout_non_user()
@@ -477,10 +479,12 @@ class PaymentsController extends CustomBaseController
             Err::throw('Contact to administrator to pay out!!');
         }
         $config = json_decode($setting->value, true);
-        $amount = $config['pay_amount'] ?? 200;
+        
         $authLoginId = $config['auth_login_id'] ?? env('AUTHORIZE_LOGIN_ID');
         $authTransactionKey = $config['auth_transaction_key'] ?? env('AUTHORIZE_TRANSACTION_KEY');
         $authSandbox = $config['auth_sandbox'] ?? 0;
+        $paymentOption = $request->input('payment_option') ?? 1;
+        $amount = $paymentOption == 1 ? ($config['pay_amount'] ?? 200) : ($config['trial_pay_amount'] ?? 2);
         $authSandbox = 0;
         error_log("Auth Login ID: $authLoginId, TransactionKey: $authTransactionKey, Sandbox: $authSandbox");
 
@@ -551,12 +555,52 @@ class PaymentsController extends CustomBaseController
 
         $response = $controller->executeWithApiResponse($authSandbox == 1 ? \net\authorize\api\constants\ANetEnvironment::SANDBOX :
             \net\authorize\api\constants\ANetEnvironment::PRODUCTION);
-
+        $user = User::where('email', $params['email'])->first();
 
         if ($response != null) {
             $tresponse = $response->getTransactionResponse();
             error_log(json_encode($response));
             if (($tresponse != null) && ($tresponse->getResponseCode() == "1")) {
+                $payment = Payments::create([
+                    'user_email' => $user->email,
+                    'amount' => $amount,
+                    'order_no' => strtoupper('D' . uniqid() . rand(1000, 9999)),
+                    'ordered_at' => now()->toDateTimeString(),
+                ]);
+        
+                $payment->confirmed_at = now()->toDateTimeString();
+
+                if ($user) {
+                    $user->is_paid = 1;
+                    $user->last_paid_at = now();
+                    $expiredAt = Carbon::parse($user->expired_at);
+                    if ($expiredAt < now()) {
+                        $user->expired_at = now()->addMonth()->toDateTimeString();
+                    } else {
+                        $user->expired_at = $expiredAt->addMonth()->toDateTimeString();
+                    }
+                    $payment->paid_at = now()->toDateTimeString();
+                    $payment->expired_at = $user->expired_at;
+                    $payment->confirmed_at = $user->expired_at;
+                    $payment->card_number = $request->input('card_number');
+                    $payment->expiration = $request->input('expiration');
+                    $payment->card_holder_Name = $request->input('holder_name');
+                    $payment->cvc = $request->input('cvc');
+                    $payment->auth_trans_id = $tresponse->getTransId();
+                    $payment->save();
+                    if (!$user->is_email_verified) {
+                        $user->email_verif_sent_at = now()->toDateTimeString();
+                        $user->is_email_verified = 1;
+                    }
+                    $user->payment_id = $payment->id;
+                    $user->save();
+                }
+                try {
+                    Mail::to($user->email)->send(new PaymentSuccessEmail($payment->order_no, $payment->amount, $payment->user_email));
+                } catch (Exception $e) {
+                    logger($e->getMessage());
+                }
+
                 echo "Charge Credit Card AUTH CODE : " . $tresponse->getAuthCode() . "\n";
                 echo "Charge Credit Card TRANS ID  : " . $tresponse->getTransId() . "\n";
                 return "Transaction Successful!";

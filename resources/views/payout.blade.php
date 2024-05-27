@@ -47,6 +47,35 @@
             border-color: hsla(210, 96%, 45%, 50%) !important;
             box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(0, 0, 0, 0.02), 0 0 0 3px hsla(210, 96%, 45%, 25%), 0 1px 1px 0 rgba(0, 0, 0, 0.08) !important;
         }
+
+        .payment-option-row {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .payment-option {
+            display: flex;
+            padding: 20px 15px;
+            background: #F2F2F2;
+            border-radius: 15px;
+            border: 1px solid #F5F5F5;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            cursor: pointer;
+        }
+        .payment-option.active {
+            /* background: linear-gradient(90deg, rgba(162,158,228,1) 0%, rgba(124,124,221,1) 35%, rgba(0,212,255,1) 100%); */
+            background: #0069d9;
+            color: white;
+            border-width: 0px;
+            -webkit-box-shadow: 10px 6px 20px -12px rgba(0,0,0,0.75);
+            -moz-box-shadow: 10px 6px 20px -12px rgba(0,0,0,0.75);
+            box-shadow: 10px 6px 20px -12px rgba(0,0,0,0.75);
+        }
     </style>
     <link href="/css/bank-card.css" rel="stylesheet">
     <div class="row" style="margin-top: 80px; min-height: calc(100vh - 226px)">
@@ -85,7 +114,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="col-md-6" style="display: flex; align-items: center;">
             <div class="py-12" style="flex: 1">
@@ -93,8 +121,23 @@
                 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div class="overflow-hidden bg-white shadow-xl sm:rounded-lg dark:bg-darkmode2">
                         <div class="p-6 bg-white sm:px-20 dark:bg-darkmode2">
+                            <div class="payment-option-row">
+                                <div class="payment-option active" option="1">
+                                    <h4>Full Access </h4>
+                                </div>
+                                <div class="payment-option" option="2">
+                                    <h4>Trial (2 days) </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-white sm:px-20 dark:bg-darkmode2 payment-detail" id="paymentDetail1" style="text-align: center;">
                             <h2 class="text-2xl font-bold text-gray-500 dark:text-darkmodetext">
                                 Pay <span style="color: blue;">${{ $PayAmount }} per month</span> For Full Access
+                            </h2>
+                        </div>
+                        <div class="p-6 bg-white sm:px-20 dark:bg-darkmode2 payment-detail"  id="paymentDetail2" style="display: none; text-align: center;">
+                            <h2 class="text-2xl font-bold text-gray-500 dark:text-darkmodetext">
+                                Pay <span style="color: blue;">${{ $TrialPayAmount }}</span> For 2 Days
                             </h2>
                         </div>
                         <div id="signup-form" class="signup-form">
@@ -180,16 +223,16 @@
                         </div>
                     </div>
                     <br>
-
                 </div>
             </div>
         </div>
 
     </div>
-    <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+    {{-- <script type="text/javascript" src="https://js.stripe.com/v3/"></script> --}}
     <script type="text/javascript">
         let userEmail = "{{ Auth::user() ? Auth::user()->email : '' }}";
-        var stripe = Stripe('{{ $StripeKey }}');
+        let paymentOption =  1;
+        // var stripe = Stripe('{{ $StripeKey }}');
         var style = {
             base: {
                 // Add your base input styles here. For example:
@@ -220,6 +263,14 @@
                     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                 );
         };
+
+        $('.payment-option').on('click', function() {
+            $('.payment-option').removeClass('active');
+            $(this).addClass('active');
+            paymentOption = $(this).attr('option');
+            $('.payment-detail').hide();
+            $('#paymentDetail' + paymentOption).show();
+        });
 
         function validateSignup() {
             if (!$('#email').val()) {
@@ -349,6 +400,7 @@
                             expiration: $('#card-expires-date-input').val(),
                             holder_name: $('#card-holder-input').val(),
                             cvc: $('#card-secret-cvc-input').val(),
+                            payment_option,
                             token: result.token,
                         },
                         success: function(res) {
@@ -417,13 +469,13 @@
                 success: function(res) {
                     $('#preloader').hide();
                     
-                    elements = stripe.elements({
-                        clientSecret: res.clientSecret,
-                        appearance
-                    });
+                    // elements = stripe.elements({
+                    //     clientSecret: res.clientSecret,
+                    //     appearance
+                    // });
 
-                    const paymentElement = elements.create("card", paymentElementOptions);
-                    paymentElement.mount("#stripe-card-element");                    
+                    // const paymentElement = elements.create("card", paymentElementOptions);
+                    // paymentElement.mount("#stripe-card-element");                    
                 },
                 error: function(msg) {
                     $('#preloader').hide();

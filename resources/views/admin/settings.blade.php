@@ -75,6 +75,14 @@
                                 </div>
                                 <div class='col-12'>
                                     <div class="search-form display-flex admin-search-form">
+                                        <span class="form-label" style="width: 320px;">Trial Pay
+                                            Amount($):&nbsp;</span>
+                                        <input type="number" class="search-field" value="" role="presentation"
+                                            autocomplete="off" name="trial_pay_amount" />
+                                    </div>
+                                </div>
+                                <div class='col-12'>
+                                    <div class="search-form display-flex admin-search-form">
                                         <span class="form-label" style="width: 320px;">Maximum reach number:&nbsp;</span>
                                         <input type="number" class="search-field" value="" role="presentation"
                                             autocomplete="off" name="max_free_num" />
@@ -250,6 +258,7 @@
                         $('input[name="stripe_api_key"]').val(value.stripe_api_key ?? '');
                         $('input[name="web_hook_secret"]').val(value.web_hook_secret ?? '');
                         $('input[name="pay_amount"]').val(value.pay_amount ?? 0);
+                        $('input[name="trial_pay_amount"]').val(value.trial_pay_amount ?? 0);
                         $('input[name="max_free_num"]').val(value.max_free_num ?? 1);
                         $('input[name="auth_login_id"]').val(value.auth_login_id ?? '');
                         $('input[name="auth_transaction_key"]').val(value.auth_transaction_key ?? '');
@@ -280,6 +289,7 @@
                         stripe_api_key: $('input[name="stripe_api_key"]').val(),
                         web_hook_secret: $('input[name="web_hook_secret"]').val(),
                         pay_amount: $('input[name="pay_amount"]').val(),
+                        trial_pay_amount: $('input[name="trial_pay_amount"]').val(),
                         max_free_num: $('input[name="max_free_num"]').val(),
                         auth_login_id: $('input[name="auth_login_id"]').val(),
                         auth_transaction_key: $('input[name="auth_transaction_key"]').val(),
