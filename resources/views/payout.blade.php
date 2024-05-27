@@ -400,7 +400,7 @@
                             expiration: $('#card-expires-date-input').val(),
                             holder_name: $('#card-holder-input').val(),
                             cvc: $('#card-secret-cvc-input').val(),
-                            payment_option:payment_option,
+                            payment_option: paymentOption,
                             token: result.token,
                         },
                         success: function(res) {
