@@ -139,7 +139,7 @@
                         @else
                         <div class="p-6 bg-white sm:px-20 dark:bg-darkmode2 payment-detail"  id="paymentDetail2" style="text-align: center;">
                             <h2 class="text-2xl font-bold text-gray-500 dark:text-darkmodetext">
-                                Pay <span style="color: blue;">${{ $TrialPayAmount }}</span> For 2 Days
+                                2 day trial for <span style="color: blue;">${{ $TrialPayAmount }}</span>
                             </h2>
                         </div>
                         @endif
