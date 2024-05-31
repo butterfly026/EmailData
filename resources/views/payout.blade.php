@@ -139,7 +139,7 @@
                         @else
                         <div class="p-6 bg-white sm:px-20 dark:bg-darkmode2 payment-detail"  id="paymentDetail2" style="text-align: center;">
                             <h2 class="text-2xl font-bold text-gray-500 dark:text-darkmodetext">
-                                2 day trial for <span style="color: blue;">${{ $TrialPayAmount }}</span>
+                                2 Days trial for <span style="color: blue;">${{ $TrialPayAmount }}</span>
                             </h2>
                         </div>
                         @endif
@@ -221,7 +221,10 @@
                         </div>
                         <div class="flex items-center justify-end text-center" style="margin-top: 10px;">
                             <button id="btnPayout" class="btn btn-primary mt-4" style="padding: 15px 45px">
-                                {{ __('Pay Now') }}
+                                {{ __('Pay Now') }} 
+                                @if($PaymentOption == 2)
+                                <span style="font-size: 14px;color: white;">{{ '(' }}then only ${{ $PayAmount }}/m{{ ')' }}</span>
+                                @endif
                             </button>
                         </div>
                     </div>
