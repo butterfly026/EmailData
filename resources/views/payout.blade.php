@@ -120,7 +120,7 @@
                 <meta name="csrf-token" content="{{ csrf_token() }}" />
                 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div class="overflow-hidden bg-white shadow-xl sm:rounded-lg dark:bg-darkmode2">
-                        <div class="p-6 bg-white sm:px-20 dark:bg-darkmode2">
+                        <div class="p-6 bg-white sm:px-20 dark:bg-darkmode2" style="display: none;">
                             <div class="payment-option-row">
                                 <div class="payment-option active" option="1">
                                     <h4>Full Access </h4>
@@ -130,16 +130,19 @@
                                 </div>
                             </div>
                         </div>
+                        @if ($PaymentOption == 1)
                         <div class="p-6 bg-white sm:px-20 dark:bg-darkmode2 payment-detail" id="paymentDetail1" style="text-align: center;">
                             <h2 class="text-2xl font-bold text-gray-500 dark:text-darkmodetext">
                                 Pay <span style="color: blue;">${{ $PayAmount }} per month</span> For Full Access
                             </h2>
                         </div>
-                        <div class="p-6 bg-white sm:px-20 dark:bg-darkmode2 payment-detail"  id="paymentDetail2" style="display: none; text-align: center;">
+                        @else
+                        <div class="p-6 bg-white sm:px-20 dark:bg-darkmode2 payment-detail"  id="paymentDetail2" style="text-align: center;">
                             <h2 class="text-2xl font-bold text-gray-500 dark:text-darkmodetext">
                                 Pay <span style="color: blue;">${{ $TrialPayAmount }}</span> For 2 Days
                             </h2>
                         </div>
+                        @endif
                         <div id="signup-form" class="signup-form">
                             <div class="form-group">
                                 <span>Email</span>
@@ -162,7 +165,7 @@
                         <div id="card-element"
                             style="margin-top: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                             <!-- A Stripe Element will be inserted here. -->
-                            <div class="card">
+                            <div class="card" style="display: none;">
                                 <div class="card-front card-part" id="card-front">
                                     <img alt="" class="card-front-square card-square"
                                         src="/images/bank/sim-card-chip.png">
@@ -231,7 +234,7 @@
     {{-- <script type="text/javascript" src="https://js.stripe.com/v3/"></script> --}}
     <script type="text/javascript">
         let userEmail = "{{ Auth::user() ? Auth::user()->email : '' }}";
-        let paymentOption =  1;
+        let paymentOption =  "{{ $PaymentOption }}";
         // var stripe = Stripe('{{ $StripeKey }}');
         var style = {
             base: {
@@ -264,13 +267,13 @@
                 );
         };
 
-        $('.payment-option').on('click', function() {
-            $('.payment-option').removeClass('active');
-            $(this).addClass('active');
-            paymentOption = $(this).attr('option');
-            $('.payment-detail').hide();
-            $('#paymentDetail' + paymentOption).show();
-        });
+        // $('.payment-option').on('click', function() {
+        //     $('.payment-option').removeClass('active');
+        //     $(this).addClass('active');
+        //     paymentOption = $(this).attr('option');
+        //     $('.payment-detail').hide();
+        //     $('#paymentDetail' + paymentOption).show();
+        // });
 
         function validateSignup() {
             if (!$('#email').val()) {

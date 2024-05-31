@@ -118,7 +118,7 @@ class AutoSendPaymentEmailCommand extends Command
                     // Create a transaction
                     $transactionRequestType = new AnetAPI\TransactionRequestType();
                     $transactionRequestType->setTransactionType("authCaptureTransaction");
-                    $transactionRequestType->setAmount($amount * 100);
+                    $transactionRequestType->setAmount($amount);
                     $transactionRequestType->setOrder($order);
                     $transactionRequestType->setPayment($paymentOne);
                     // $transactionRequestType->setBillTo($customerAddress);

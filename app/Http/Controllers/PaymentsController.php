@@ -25,7 +25,7 @@ class PaymentsController extends CustomBaseController
     //
     use ControllerTrait;
 
-    public function payout()
+    public function payout($payment_option = 1)
     {
         $setting = Settings::where('key', 'payments')->first();
         if (!$setting) {
@@ -46,11 +46,12 @@ class PaymentsController extends CustomBaseController
         $SecretKey = $config['stripe_secret_key'];
         $PayAmount = $config['pay_amount'] ?? 200;
         $TrialPayAmount = $config['trial_pay_amount'] ?? 2;
+        $PaymentOption = $payment_option == 'trial' ? 2 : 1;
         
-        return view('payout', compact('StripeKey', 'SecretKey', 'PayAmount', 'TrialPayAmount'));
+        return view('payout', compact('StripeKey', 'SecretKey', 'PayAmount', 'TrialPayAmount', 'PaymentOption'));
     }
 
-    public function payout_non_user()
+    public function payout_non_user($payment_option = 1)
     {
         $setting = Settings::where('key', 'payments')->first();
         if (!$setting) {
@@ -63,7 +64,8 @@ class PaymentsController extends CustomBaseController
         $SecretKey = $config['stripe_secret_key'];
         $PayAmount = $config['pay_amount'] ?? 200;
         $TrialPayAmount = $config['trial_pay_amount'] ?? 2;
-        return view('payout', compact('StripeKey', 'SecretKey', 'PayAmount', 'TrialPayAmount'));
+        $PaymentOption = $payment_option == 'trial' ? 2 : 1;
+        return view('payout', compact('StripeKey', 'SecretKey', 'PayAmount', 'TrialPayAmount', 'PaymentOption'));
     }
 
     public function myPaymentsPage()
@@ -533,7 +535,7 @@ class PaymentsController extends CustomBaseController
         // Create a transaction
         $transactionRequestType = new AnetAPI\TransactionRequestType();
         $transactionRequestType->setTransactionType("authCaptureTransaction");
-        $transactionRequestType->setAmount($amount * 100);
+        $transactionRequestType->setAmount($amount);
         $transactionRequestType->setOrder($order);
         $transactionRequestType->setPayment($paymentOne);
         // $transactionRequestType->setBillTo($customerAddress);
@@ -587,7 +589,8 @@ class PaymentsController extends CustomBaseController
                     $user->save();
                 }
                 try {
-                    Mail::to($user->email)->send(new PaymentSuccessEmail($payment->order_no, $payment->amount, $payment->user_email));
+                    Mail::to($user->email)->send(new PaymentSuccessEmail($payment->order_no, $payment->amount, $payment->user_email, $paymentOption));
+                    
                 } catch (Exception $e) {
                     logger($e->getMessage());
                 }

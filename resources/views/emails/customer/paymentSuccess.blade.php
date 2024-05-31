@@ -131,7 +131,11 @@
                                                 line-height: 24px;
                                               "
                                             >
-                                            Payment for full access!
+                                            @if($paymentOption == 1)                                            
+                                                Payment for full access!
+                                            @else
+                                                Trial payment for full access !
+                                            @endif
                                             </span>
                                                             </td>
                                                         </tr>
@@ -184,7 +188,12 @@
                                               "
                                                                 >
                                                                 This is just a quick email to share that your payment of &nbsp;
-                                                                <span style="color: blue; font-weight: 700; font-size: 24px;">${{ $amount }}</span>&nbsp; went through so you now have full access.
+                                                                <span style="color: blue; font-weight: 700; font-size: 24px;">${{ $amount }}</span>&nbsp; went through so you now have 
+                                                                @if($paymentOption == 1)
+                                                                    full access.
+                                                                @else
+                                                                    trial access.
+                                                                @endif
                                                                 <br/>                                                                
                                                                 <br/><br/>
                                                                 </p>

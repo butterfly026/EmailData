@@ -13,8 +13,10 @@ Route::middleware('auth')->get('/admin_panel', [AdminController::class, 'admin_p
 Route::middleware('auth')->get('/users_management', [AdminController::class, 'users']);
 Route::middleware('auth')->get('/admin_settings', [AdminController::class, 'settings']);
 Route::middleware('auth')->get('/payments_management', [AdminController::class, 'payments']);
+Route::middleware('auth')->get('/payout/{payment_option}', [PaymentsController::class, 'payout']);
 Route::middleware('auth')->get('/payout', [PaymentsController::class, 'payout']);
 Route::middleware('auth')->get('/user_info', [PaymentsController::class, 'myPaymentsPage']);
+Route::get('/payout_non_user/{payment_option}', [PaymentsController::class, 'payout_non_user']);
 Route::get('/payout_non_user', [PaymentsController::class, 'payout_non_user']);
 Route::get('/signin', [AuthController::class, 'loginPage'])->name('auth.loginPage');
 Route::get('/404_error', [AuthController::class, 'notFoundPage'])->name('route.404error');
