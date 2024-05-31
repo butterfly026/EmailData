@@ -131,15 +131,15 @@
                             </div>
                         </div>
                         @if ($PaymentOption == 1)
-                        <div class="p-6 bg-white sm:px-20 dark:bg-darkmode2 payment-detail" id="paymentDetail1" style="text-align: center;">
+                        <div class="p-6 mt-4 bg-white sm:px-20 dark:bg-darkmode2 payment-detail" id="paymentDetail1" style="text-align: center;">
                             <h2 class="text-2xl font-bold text-gray-500 dark:text-darkmodetext">
                                 Pay <span style="color: blue;">${{ $PayAmount }} per month</span> For Full Access
                             </h2>
                         </div>
                         @else
-                        <div class="p-6 bg-white sm:px-20 dark:bg-darkmode2 payment-detail"  id="paymentDetail2" style="text-align: center;">
+                        <div class="p-6 mt-4 bg-white sm:px-20 dark:bg-darkmode2 payment-detail"  id="paymentDetail2" style="text-align: center;">
                             <h2 class="text-2xl font-bold text-gray-500 dark:text-darkmodetext">
-                                2 Days trial for <span style="color: blue;">${{ $TrialPayAmount }}</span>
+                                2 Day trial for <span style="color: blue;">${{ $TrialPayAmount }}</span>
                             </h2>
                         </div>
                         @endif
