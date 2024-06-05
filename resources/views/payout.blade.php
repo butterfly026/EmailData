@@ -81,7 +81,7 @@
     <div class="row" style="margin-top: 80px; min-height: calc(100vh - 226px)">
         <div class="col-md-6" style="display: flex; align-items: center;">
             <div style="flex: 1;">
-                <img loading="lazy" class="service-img-back" src="images/deals.png" alt="portfolio">
+                <img loading="lazy" class="service-img-back" src="/images/deals.png" alt="portfolio">
                 <h1 style="margin-bottom: 10px;">Unlimited Searches & Downloads Every Month (28,000+ leads)</h1>
                 <div>
                     <div class="service-detail-item">
@@ -189,7 +189,7 @@
                                         <div class="card-secret">
                                             <p class="card-secret--last" id="card-secret-cvc">***</p>
                                         </div>
-                                        <img alt="" class="card-back-logo card-logo" src="assets/logos/22.svg">
+                                        <img alt="" class="card-back-logo card-logo" src="/assets/logos/22.svg">
                                     </div>
                                 </div>
                             </div>
