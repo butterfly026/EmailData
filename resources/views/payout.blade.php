@@ -221,8 +221,10 @@
                         </div>
                         <div class="flex items-center justify-end text-center" style="margin-top: 10px;">
                             <button id="btnPayout" class="btn btn-primary mt-4" style="padding: 15px 45px">
-                                {{ __('Pay $') .$PayAmount . __(' Now') }} 
-                                @if($PaymentOption == 2)
+                                @if($PaymentOption == 1)
+                                    {{ __('Pay Now') }} 
+                                @else
+                                {{ __('Pay $') .$TrialPayAmount . __(' Now') }} 
                                 <span style="font-size: 14px;color: white;">{{ '(' }}then only ${{ $PayAmount }}/m{{ ')' }}</span>
                                 @endif
                             </button>
