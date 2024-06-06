@@ -193,8 +193,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div>
-                                <form class="card-form">
+                            <div style="width: 100%;">
+                                <form class="card-form" style="display: flex;
+                                flex-direction: column;
+                                justify-content: flex-start;
+                                align-items: center;">
                                     <div class="row">
                                         <span>Card holder</span>
                                         <input id="card-holder-input" placeholder="Card holder name" type="text">
