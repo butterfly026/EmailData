@@ -69,7 +69,7 @@
         <div class="col-md-6" style="display: flex; align-items: center;">
             <div style="flex: 1;">
                 <img loading="lazy" class="service-img-back" src="images/deals.png" alt="portfolio">
-                <h1 style="margin-bottom: 10px;">Unlimited Searches & Downloads Every Month (28,000+ leads)</h1>
+                <h1 style="margin-bottom: 10px;">Unlimited Searches & Downloads Every Month (20,000+ ecom store leads)</h1>
                 <div>
                     <div class="service-detail-item">
                         <span class="circle-num">1</span>

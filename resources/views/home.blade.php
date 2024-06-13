@@ -123,7 +123,7 @@
                                     <h2 class="iq-title text-white text-uppercase wow fadeIn"
                                         style="visibility: visible; animation-name: fadeIn;">You are currently viewing 5 out
                                         of
-                                        28,000+ results</h2>
+                                        20,000+ results</h2>
                                     <p class="text-white wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
                                         Unlimited access to all data + monthly updates of new leads added to the database &
                                         their contact information:</span></p>
@@ -153,7 +153,7 @@
                                 <div class="text-left iq-title-box">
                                     <h2 class="iq-title text-white text-uppercase wow fadeIn"
                                         style="visibility: visible; animation-name: fadeIn;">You are currently viewing
-                                        unlimited 28,000+ results</h2>
+                                        unlimited 20,000+ results</h2>
                                     <p class="text-white wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
                                     You now have access to unlimited results!</span></p>
                                 </div>
