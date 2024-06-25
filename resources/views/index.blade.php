@@ -1,3 +1,16 @@
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="description" content="You can find any marketing data" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="og:site_name" content="Email Data" />
+    <meta name="og:title" content="EMAIL DATA" />
+    <meta name="og:url" content="https://emaildata.co/" />
+    <meta name="og:image" content="https://emaildata.co/images/deals.png" />
+    <meta name="og:type" content="website" />
+    <meta name="og:image:type" content="image/jpeg" />
     <link rel="stylesheet" href="/assets/assets/owl.carousel.min.css" />
     <link rel="stylesheet" href="/assets/assets/owl.theme.default.min.css" />
     <!-- You can use latest version of jQuery  -->
@@ -101,7 +114,17 @@
 
       });
     </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16623057694">
+    </script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
+        gtag('config', 'AW-16623057694');
+    </script>
+</head>
     <body>
       <div class="relative mb-20 lg:pb-48">
         <header class="lg:container mx-auto pb-5">
