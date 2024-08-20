@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Crypt;
+use App\Helpers\IpHelper;
 use App\Http\Controllers\CustomBaseController;
 use App\Mail\SignupMail;
 use App\Models\Marketings;
@@ -47,6 +49,28 @@ class AuthController extends CustomBaseController
         $user->email_verified_at = now()->toDateTimeString();
         $user->save();
         return view('auth.verifyEmail');
+    }
+
+    
+    public function myIpAddr(Request $request) {
+        $params = $request->validate([
+            'email' => 'nullable|string',
+        ]);        
+        $enc = Crypt::encryptString($params['email'] ?? '');
+        $ipAddr = IpHelper::GetIP();
+        error_log(" Ip Addr = $ipAddr");
+        error_log(json_encode([
+            'user_id' => request()->user(),
+            'url' => request()->fullUrl(),
+            'method' => request()->method(),
+            'ip_address' => request()->ip(),
+            'header' => request()->headers->all(),
+            'body' => request()->all(),
+        ]));
+        return [
+            "ip" => IpHelper::GetIP(),
+            "enc" => $enc
+        ] ;
     }
 
 

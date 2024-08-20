@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PaymentsController;
 
+Route::post('/ipAddr', [AuthController::class, 'myIpAddr'])->name('api.myIpAddr');
 Route::middleware('guest')->get('/', [HomeController::class, 'index']);
 Route::middleware('auth')->get('/home', [HomeController::class, 'home'])->name('home');
 Route::middleware('auth')->get('/admin_panel', [AdminController::class, 'admin_panel']);

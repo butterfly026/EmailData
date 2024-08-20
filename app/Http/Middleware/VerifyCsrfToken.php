@@ -13,6 +13,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
-        'payment_hook'
+        'payment_hook',
+        'ipAddr'
     ];
 }
